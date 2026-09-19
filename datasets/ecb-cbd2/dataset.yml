@@ -1,0 +1,60 @@
+root: "../../out"
+schema_version: 1
+
+dataset:
+  name: "ecb_cbd2"
+  source_id: "ecb"
+  tags: [banche, bce, cbd2, sistema-bancario, europa]
+  category: economia
+  years: [2026]
+  time_coverage:
+    start_year: 2015
+    end_year: 2026
+
+raw:
+  output_policy: overwrite
+  sources:
+    - name: "ecb_cbd2_raw"
+      type: "http_file"
+      client:
+        timeout: 120
+        retries: 2
+        user_agent: "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+      args:
+        url: "https://data-api.ecb.europa.eu/service/data/CBD2?format=csvdata&startPeriod=2015"
+        filename: "ecb_cbd2_raw.csv"
+      primary: true
+
+clean:
+  sql: "sql/clean.sql"
+  read:
+    source: auto
+    mode: latest
+    delim: ","
+    encoding: utf-8
+    header: true
+  required_columns:
+    - paese
+    - indicatore
+    - periodo
+    - valore
+    - anno
+    - trimestre
+  validate:
+    min_rows: 1000
+
+mart:
+  tables:
+    - name: "mart_bank_kpi"
+      sql: "sql/mart_bank_kpi.sql"
+    - name: "mart_bank_snapshot"
+      sql: "sql/mart_bank_snapshot.sql"
+  required_tables: ["mart_bank_kpi", "mart_bank_snapshot"]
+  validate:
+    table_rules:
+      mart_bank_kpi:
+        not_null: [paese, anno]
+        min_rows: 100
+      mart_bank_snapshot:
+        not_null: [paese, anno]
+        min_rows: 10

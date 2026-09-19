@@ -1,0 +1,52 @@
+root: "../../out"
+schema_version: 1
+
+dataset:
+  name: "eba_panel"
+  source_id: "eba"
+  tags: [banche, eba, panel, banche-singole, corep, finrep]
+  category: economia
+  years: [2026]
+  time_coverage:
+    start_year: 2012
+    end_year: 2025
+
+raw:
+  output_policy: overwrite
+  sources:
+    - name: "eba_panel_raw"
+      type: "local_file"
+      args:
+        path: "raw/eba_panel_raw.parquet"
+      primary: true
+
+clean:
+  sql: "sql/clean.sql"
+  read:
+    source: auto
+    mode: latest
+  required_columns:
+    - banca
+    - paese
+    - periodo
+    - codice_variabile
+    - nome_variabile
+    - valore
+  validate:
+    min_rows: 10000
+
+mart:
+  tables:
+    - name: "mart_banche_kpi"
+      sql: "sql/mart_banche_kpi.sql"
+    - name: "mart_banche_snapshot"
+      sql: "sql/mart_banche_snapshot.sql"
+  required_tables: ["mart_banche_kpi", "mart_banche_snapshot"]
+  validate:
+    table_rules:
+      mart_banche_kpi:
+        not_null: [banca, periodo]
+        min_rows: 1000
+      mart_banche_snapshot:
+        not_null: [banca]
+        min_rows: 50

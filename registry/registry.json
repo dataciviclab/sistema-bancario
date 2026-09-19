@@ -1,0 +1,1214 @@
+{
+  "schema_version": 1,
+  "repo": "sistema-bancario",
+  "source_repo": "sistema-bancario",
+  "updated_at": "2026-09-18",
+  "datasets": [
+    {
+      "slug": "banche_unified",
+      "name": "Banche Unified",
+      "description": "Compose: vista unificata KPI bancari + bilanci + tassi da ecb-cbd2 + ecb-bsi + ecb-mir.",
+      "source": "",
+      "source_id": "banche_intelligence_composite",
+      "period": {
+        "start": 2026,
+        "end": 2026
+      },
+      "tags": [
+        "banche",
+        "compose",
+        "unified",
+        "panorama"
+      ],
+      "category": "economia",
+      "columns": [
+        {
+          "name": "paese",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": "",
+          "semantic_type": "country_code"
+        },
+        {
+          "name": "anno",
+          "type": "INTEGER",
+          "role": "dimension",
+          "description": "",
+          "semantic_type": "year"
+        },
+        {
+          "name": "trimestre",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "roe_pct",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "roa_pct",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "costo_reddito_pct",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "cet1_pct",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "npl_ratio_pct",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "lcr_pct",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "attivo_totale_mld",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "prestiti_mld",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "deposits_mld",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "obbligazioni_mld",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "capitale_mld",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "tasso_mutuo_pct",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "tasso_imprese_pct",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "tasso_depositi_scadenza_pct",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        }
+      ],
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-clean/sistema_bancario/banche_unified/2026/banche_unified_2026_clean.parquet",
+        "multi_file": false
+      },
+      "stage": "incubating",
+      "mart_refs": [
+        "banche_unified__mart_panorama"
+      ]
+    },
+    {
+      "slug": "eba_panel",
+      "name": "Eba Panel",
+      "description": "",
+      "source": "",
+      "source_id": "eba",
+      "period": {
+        "start": 2012,
+        "end": 2025
+      },
+      "tags": [
+        "banche",
+        "eba",
+        "panel",
+        "banche-singole",
+        "corep",
+        "finrep"
+      ],
+      "category": "economia",
+      "columns": [
+        {
+          "name": "banca",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "nome_banca",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "nome_legale",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "paese",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": "",
+          "semantic_type": "country_code"
+        },
+        {
+          "name": "nome_paese",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "tipo_ssm",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "periodo",
+          "type": "INTEGER",
+          "role": "dimension",
+          "description": "",
+          "semantic_type": "month"
+        },
+        {
+          "name": "codice_variabile",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "nome_variabile",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "valore",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        }
+      ],
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-clean/sistema_bancario/eba_panel/2026/eba_panel_2026_clean.parquet",
+        "multi_file": false
+      },
+      "stage": "incubating",
+      "mart_refs": [
+        "eba_panel__mart_banche_kpi",
+        "eba_panel__mart_banche_snapshot"
+      ]
+    },
+    {
+      "slug": "ecb_bls",
+      "name": "Ecb Bls",
+      "description": "",
+      "source": "",
+      "source_id": "ecb",
+      "period": {
+        "start": 2007,
+        "end": 2026
+      },
+      "tags": [
+        "banche",
+        "bce",
+        "bls",
+        "credit-standards",
+        "domanda-credito"
+      ],
+      "category": "economia",
+      "columns": [
+        {
+          "name": "paese",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": "",
+          "semantic_type": "country_code"
+        },
+        {
+          "name": "voce",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "periodo",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": "",
+          "semantic_type": "month"
+        },
+        {
+          "name": "valore",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "num_banche",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "anno",
+          "type": "INTEGER",
+          "role": "dimension",
+          "description": "",
+          "semantic_type": "year"
+        },
+        {
+          "name": "trimestre",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        }
+      ],
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-clean/sistema_bancario/ecb_bls/2026/ecb_bls_2026_clean.parquet",
+        "multi_file": false
+      },
+      "stage": "incubating",
+      "mart_refs": [
+        "ecb_bls__mart_bls_credit",
+        "ecb_bls__mart_bls_snapshot"
+      ]
+    },
+    {
+      "slug": "ecb_bsi",
+      "name": "Ecb Bsi",
+      "description": "",
+      "source": "",
+      "source_id": "ecb",
+      "period": {
+        "start": 2020,
+        "end": 2026
+      },
+      "tags": [
+        "banche",
+        "bce",
+        "bsi",
+        "bilanci-mfi",
+        "depositi",
+        "prestiti",
+        "moneta"
+      ],
+      "category": "economia",
+      "columns": [
+        {
+          "name": "paese",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": "",
+          "semantic_type": "country_code"
+        },
+        {
+          "name": "voce",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "periodo",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": "",
+          "semantic_type": "month"
+        },
+        {
+          "name": "valore",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "frequenza",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "settore",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "scadenza",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "unita",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "anno",
+          "type": "INTEGER",
+          "role": "dimension",
+          "description": "",
+          "semantic_type": "year"
+        },
+        {
+          "name": "trimestre",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        }
+      ],
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-clean/sistema_bancario/ecb_bsi/2026/ecb_bsi_2026_clean.parquet",
+        "multi_file": false
+      },
+      "stage": "incubating",
+      "mart_refs": [
+        "ecb_bsi__mart_bsi_balance",
+        "ecb_bsi__mart_bsi_deposits",
+        "ecb_bsi__mart_bsi_snapshot"
+      ]
+    },
+    {
+      "slug": "ecb_cbd2",
+      "name": "Ecb Cbd2",
+      "description": "",
+      "source": "",
+      "source_id": "ecb",
+      "period": {
+        "start": 2024,
+        "end": 2026
+      },
+      "tags": [
+        "banche",
+        "bce",
+        "cbd2",
+        "sistema-bancario",
+        "europa"
+      ],
+      "category": "economia",
+      "columns": [
+        {
+          "name": "paese",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": "",
+          "semantic_type": "country_code"
+        },
+        {
+          "name": "indicatore",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "periodo",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": "",
+          "semantic_type": "month"
+        },
+        {
+          "name": "valore",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "frequenza",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "settore",
+          "type": "BIGINT",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "framework",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "portfolio",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "tipo_esposizione",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "anno",
+          "type": "INTEGER",
+          "role": "dimension",
+          "description": "",
+          "semantic_type": "year"
+        },
+        {
+          "name": "trimestre",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        }
+      ],
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-clean/sistema_bancario/ecb_cbd2/2026/ecb_cbd2_2026_clean.parquet",
+        "multi_file": false
+      },
+      "stage": "incubating",
+      "mart_refs": [
+        "ecb_cbd2__mart_bank_kpi",
+        "ecb_cbd2__mart_bank_snapshot"
+      ]
+    },
+    {
+      "slug": "ecb_mir",
+      "name": "Ecb Mir",
+      "description": "",
+      "source": "",
+      "source_id": "ecb",
+      "period": {
+        "start": 2020,
+        "end": 2026
+      },
+      "tags": [
+        "banche",
+        "bce",
+        "mir",
+        "tassi-interesse",
+        "prestiti",
+        "depositi"
+      ],
+      "category": "economia",
+      "columns": [
+        {
+          "name": "paese",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": "",
+          "semantic_type": "country_code"
+        },
+        {
+          "name": "voce",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "scadenza",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "periodo",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": "",
+          "semantic_type": "month"
+        },
+        {
+          "name": "valore",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "tipo_dato",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "copertura_attivita",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "settore",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "anno",
+          "type": "INTEGER",
+          "role": "dimension",
+          "description": "",
+          "semantic_type": "year"
+        },
+        {
+          "name": "trimestre",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        }
+      ],
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-clean/sistema_bancario/ecb_mir/2026/ecb_mir_2026_clean.parquet",
+        "multi_file": false
+      },
+      "stage": "incubating",
+      "mart_refs": [
+        "ecb_mir__mart_mir_rates",
+        "ecb_mir__mart_mir_snapshot"
+      ]
+    },
+    {
+      "slug": "wb_financial",
+      "name": "Wb Financial",
+      "description": "",
+      "source": "",
+      "source_id": "worldbank",
+      "period": {
+        "start": 1960,
+        "end": 2025
+      },
+      "tags": [
+        "banche",
+        "world-bank",
+        "wdi",
+        "npl",
+        "credito",
+        "filiali",
+        "storico"
+      ],
+      "category": "economia",
+      "columns": [
+        {
+          "name": "paese",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": "",
+          "semantic_type": "country_code"
+        },
+        {
+          "name": "codice_paese",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "indicatore",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "codice_indicatore",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "anno",
+          "type": "INTEGER",
+          "role": "dimension",
+          "description": "",
+          "semantic_type": "year"
+        },
+        {
+          "name": "valore",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        }
+      ],
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-clean/sistema_bancario/wb_financial/2026/wb_financial_2026_clean.parquet",
+        "multi_file": false
+      },
+      "stage": "incubating",
+      "mart_refs": [
+        "wb_financial__mart_wd_indicators",
+        "wb_financial__mart_wd_snapshot"
+      ]
+    }
+  ],
+  "marts": [
+    {
+      "slug": "banche_unified__mart_panorama",
+      "dataset": "banche_unified",
+      "table": "mart_panorama",
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-mart/sistema_bancario/banche_unified/2026/mart_panorama.parquet",
+        "multi_file": false
+      }
+    },
+    {
+      "slug": "eba_panel__mart_banche_kpi",
+      "dataset": "eba_panel",
+      "table": "mart_banche_kpi",
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-mart/sistema_bancario/eba_panel/2026/mart_banche_kpi.parquet",
+        "multi_file": false
+      }
+    },
+    {
+      "slug": "eba_panel__mart_banche_snapshot",
+      "dataset": "eba_panel",
+      "table": "mart_banche_snapshot",
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-mart/sistema_bancario/eba_panel/2026/mart_banche_snapshot.parquet",
+        "multi_file": false
+      }
+    },
+    {
+      "slug": "ecb_bls__mart_bls_credit",
+      "dataset": "ecb_bls",
+      "table": "mart_bls_credit",
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-mart/sistema_bancario/ecb_bls/2026/mart_bls_credit.parquet",
+        "multi_file": false
+      }
+    },
+    {
+      "slug": "ecb_bls__mart_bls_snapshot",
+      "dataset": "ecb_bls",
+      "table": "mart_bls_snapshot",
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-mart/sistema_bancario/ecb_bls/2026/mart_bls_snapshot.parquet",
+        "multi_file": false
+      }
+    },
+    {
+      "slug": "ecb_bsi__mart_bsi_balance",
+      "dataset": "ecb_bsi",
+      "table": "mart_bsi_balance",
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-mart/sistema_bancario/ecb_bsi/2026/mart_bsi_balance.parquet",
+        "multi_file": false
+      }
+    },
+    {
+      "slug": "ecb_bsi__mart_bsi_deposits",
+      "dataset": "ecb_bsi",
+      "table": "mart_bsi_deposits",
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-mart/sistema_bancario/ecb_bsi/2026/mart_bsi_deposits.parquet",
+        "multi_file": false
+      }
+    },
+    {
+      "slug": "ecb_bsi__mart_bsi_snapshot",
+      "dataset": "ecb_bsi",
+      "table": "mart_bsi_snapshot",
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-mart/sistema_bancario/ecb_bsi/2026/mart_bsi_snapshot.parquet",
+        "multi_file": false
+      }
+    },
+    {
+      "slug": "ecb_cbd2__mart_bank_kpi",
+      "dataset": "ecb_cbd2",
+      "table": "mart_bank_kpi",
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-mart/sistema_bancario/ecb_cbd2/2026/mart_bank_kpi.parquet",
+        "multi_file": false
+      }
+    },
+    {
+      "slug": "ecb_cbd2__mart_bank_snapshot",
+      "dataset": "ecb_cbd2",
+      "table": "mart_bank_snapshot",
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-mart/sistema_bancario/ecb_cbd2/2026/mart_bank_snapshot.parquet",
+        "multi_file": false
+      }
+    },
+    {
+      "slug": "ecb_mir__mart_mir_rates",
+      "dataset": "ecb_mir",
+      "table": "mart_mir_rates",
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-mart/sistema_bancario/ecb_mir/2026/mart_mir_rates.parquet",
+        "multi_file": false
+      }
+    },
+    {
+      "slug": "ecb_mir__mart_mir_snapshot",
+      "dataset": "ecb_mir",
+      "table": "mart_mir_snapshot",
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-mart/sistema_bancario/ecb_mir/2026/mart_mir_snapshot.parquet",
+        "multi_file": false
+      }
+    },
+    {
+      "slug": "wb_financial__mart_wd_indicators",
+      "dataset": "wb_financial",
+      "table": "mart_wd_indicators",
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-mart/sistema_bancario/wb_financial/2026/mart_wd_indicators.parquet",
+        "multi_file": false
+      }
+    },
+    {
+      "slug": "wb_financial__mart_wd_snapshot",
+      "dataset": "wb_financial",
+      "table": "mart_wd_snapshot",
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-mart/sistema_bancario/wb_financial/2026/mart_wd_snapshot.parquet",
+        "multi_file": false
+      }
+    }
+  ],
+  "signals": [
+    {
+      "id": "compose:banche_unified",
+      "source_id": "dataciviclab_composite",
+      "status": "ok",
+      "label": "banche_unified",
+      "detail": "anno 2026 — mart: si",
+      "action": "",
+      "run": {
+        "run_id": "20260917T223159Z_d8a52e71",
+        "year": 2026,
+        "status": "SUCCESS",
+        "quality_score": {
+          "raw": 100,
+          "clean": 100,
+          "mart": 100
+        },
+        "output_rows": {
+          "clean": 1325,
+          "mart": 1325
+        },
+        "output_bytes": {
+          "raw": 47247,
+          "clean": 38487,
+          "mart": 34720
+        },
+        "started_at": "2026-09-17T22:31:59.427714+00:00",
+        "finished_at": "2026-09-17T22:31:59.926649+00:00",
+        "duration_seconds": 0.499
+      }
+    },
+    {
+      "id": "eba_panel",
+      "source_id": "eba",
+      "status": "ok",
+      "label": "eba_panel",
+      "detail": "anno 2026 — mart: si",
+      "action": "",
+      "run": {
+        "run_id": "20260917T220202Z_56803605",
+        "year": 2026,
+        "status": "SUCCESS",
+        "quality_score": {
+          "raw": 100,
+          "clean": 95,
+          "mart": 100
+        },
+        "output_rows": {
+          "clean": 514121,
+          "mart": 4420
+        },
+        "output_bytes": {
+          "raw": 155561608,
+          "clean": 2379245,
+          "mart": 208269
+        },
+        "started_at": "2026-09-17T22:02:02.523163+00:00",
+        "finished_at": "2026-09-17T22:02:16.721517+00:00",
+        "duration_seconds": 14.198
+      }
+    },
+    {
+      "id": "ecb_bls",
+      "source_id": "ecb",
+      "status": "ok",
+      "label": "ecb_bls",
+      "detail": "anno 2026 — mart: si",
+      "action": "",
+      "run": {
+        "run_id": "20260917T220220Z_947ea348",
+        "year": 2026,
+        "status": "SUCCESS",
+        "quality_score": {
+          "raw": 100,
+          "clean": 95,
+          "mart": 100
+        },
+        "output_rows": {
+          "raw": 1225110,
+          "clean": 830090,
+          "mart": 1727
+        },
+        "output_bytes": {
+          "raw": 539897497,
+          "clean": 1596590,
+          "mart": 36677
+        },
+        "started_at": "2026-09-17T22:02:20.962184+00:00",
+        "finished_at": "2026-09-17T22:03:04.081863+00:00",
+        "duration_seconds": 43.12
+      }
+    },
+    {
+      "id": "ecb_bsi",
+      "source_id": "ecb",
+      "status": "ok",
+      "label": "ecb_bsi",
+      "detail": "anno 2026 — mart: si",
+      "action": "",
+      "run": {
+        "run_id": "20260917T220359Z_e70a27cd",
+        "year": 2026,
+        "status": "SUCCESS",
+        "quality_score": {
+          "raw": 100,
+          "clean": 95,
+          "mart": 100
+        },
+        "output_rows": {
+          "raw": 3492969,
+          "clean": 865602,
+          "mart": 1649
+        },
+        "output_bytes": {
+          "raw": 1953166384,
+          "clean": 4781330,
+          "mart": 32603
+        },
+        "started_at": "2026-09-17T22:03:59.614984+00:00",
+        "finished_at": "2026-09-17T22:08:51.990522+00:00",
+        "duration_seconds": 292.376
+      }
+    },
+    {
+      "id": "ecb_cbd2",
+      "source_id": "ecb",
+      "status": "ok",
+      "label": "ecb_cbd2",
+      "detail": "anno 2026 — mart: si",
+      "action": "",
+      "run": {
+        "run_id": "20260917T222829Z_3f89dd60",
+        "year": 2026,
+        "status": "SUCCESS",
+        "quality_score": {
+          "mart": 100
+        },
+        "output_rows": {
+          "mart": 1355
+        },
+        "output_bytes": {
+          "mart": 51390
+        },
+        "started_at": "2026-09-17T22:28:29.925845+00:00",
+        "finished_at": "2026-09-17T22:28:30.259849+00:00",
+        "duration_seconds": 0.334
+      }
+    },
+    {
+      "id": "ecb_mir",
+      "source_id": "ecb",
+      "status": "ok",
+      "label": "ecb_mir",
+      "detail": "anno 2026 — mart: si",
+      "action": "",
+      "run": {
+        "run_id": "20260917T221124Z_9099ec55",
+        "year": 2026,
+        "status": "SUCCESS",
+        "quality_score": {
+          "raw": 100,
+          "clean": 95,
+          "mart": 100
+        },
+        "output_rows": {
+          "raw": 588068,
+          "clean": 533728,
+          "mart": 784
+        },
+        "output_bytes": {
+          "raw": 368563968,
+          "clean": 1333718,
+          "mart": 25381
+        },
+        "started_at": "2026-09-17T22:11:24.740923+00:00",
+        "finished_at": "2026-09-17T22:11:52.061103+00:00",
+        "duration_seconds": 27.32
+      }
+    },
+    {
+      "id": "wb_financial",
+      "source_id": "worldbank",
+      "status": "ok",
+      "label": "wb_financial",
+      "detail": "anno 2026 — mart: si",
+      "action": "",
+      "run": {
+        "run_id": "20260917T221152Z_284983dc",
+        "year": 2026,
+        "status": "SUCCESS",
+        "quality_score": {
+          "raw": 100,
+          "clean": 95,
+          "mart": 100
+        },
+        "output_rows": {
+          "raw": 19081,
+          "clean": 10922,
+          "mart": 2718
+        },
+        "output_bytes": {
+          "raw": 11653498,
+          "clean": 87017,
+          "mart": 93817
+        },
+        "started_at": "2026-09-17T22:11:52.981243+00:00",
+        "finished_at": "2026-09-17T22:12:00.632747+00:00",
+        "duration_seconds": 7.652
+      }
+    }
+  ],
+  "codelists": [],
+  "entities": {
+    "entities": {
+      "Indicatore": {
+        "entity": "Indicatore",
+        "label": "Indicatore",
+        "datasets": [
+          {
+            "slug": "ecb_cbd2",
+            "name": "Ecb Cbd2",
+            "column": "indicatore",
+            "semantic_type": "indicatore_code"
+          },
+          {
+            "slug": "wb_financial",
+            "name": "Wb Financial",
+            "column": "indicatore",
+            "semantic_type": "indicatore_code"
+          },
+          {
+            "slug": "wb_financial",
+            "name": "Wb Financial",
+            "column": "codice_indicatore",
+            "semantic_type": "indicatore_code"
+          }
+        ],
+        "types": {
+          "indicatore_code": 3
+        }
+      },
+      "Nazione": {
+        "entity": "Nazione",
+        "label": "Nazione",
+        "datasets": [
+          {
+            "slug": "banche_unified",
+            "name": "Banche Unified",
+            "column": "paese",
+            "semantic_type": "country_code"
+          },
+          {
+            "slug": "eba_panel",
+            "name": "Eba Panel",
+            "column": "paese",
+            "semantic_type": "country_code"
+          },
+          {
+            "slug": "ecb_bls",
+            "name": "Ecb Bls",
+            "column": "paese",
+            "semantic_type": "country_code"
+          },
+          {
+            "slug": "ecb_bsi",
+            "name": "Ecb Bsi",
+            "column": "paese",
+            "semantic_type": "country_code"
+          },
+          {
+            "slug": "ecb_cbd2",
+            "name": "Ecb Cbd2",
+            "column": "paese",
+            "semantic_type": "country_code"
+          },
+          {
+            "slug": "ecb_mir",
+            "name": "Ecb Mir",
+            "column": "paese",
+            "semantic_type": "country_code"
+          },
+          {
+            "slug": "wb_financial",
+            "name": "Wb Financial",
+            "column": "paese",
+            "semantic_type": "country_code"
+          }
+        ],
+        "types": {
+          "country_code": 7
+        }
+      },
+      "Tempo": {
+        "entity": "Tempo",
+        "label": "Tempo / data",
+        "datasets": [
+          {
+            "slug": "banche_unified",
+            "name": "Banche Unified",
+            "column": "anno",
+            "semantic_type": "year"
+          },
+          {
+            "slug": "eba_panel",
+            "name": "Eba Panel",
+            "column": "periodo",
+            "semantic_type": "month"
+          },
+          {
+            "slug": "ecb_bls",
+            "name": "Ecb Bls",
+            "column": "periodo",
+            "semantic_type": "month"
+          },
+          {
+            "slug": "ecb_bls",
+            "name": "Ecb Bls",
+            "column": "anno",
+            "semantic_type": "year"
+          },
+          {
+            "slug": "ecb_bsi",
+            "name": "Ecb Bsi",
+            "column": "periodo",
+            "semantic_type": "month"
+          },
+          {
+            "slug": "ecb_bsi",
+            "name": "Ecb Bsi",
+            "column": "anno",
+            "semantic_type": "year"
+          },
+          {
+            "slug": "ecb_cbd2",
+            "name": "Ecb Cbd2",
+            "column": "periodo",
+            "semantic_type": "month"
+          },
+          {
+            "slug": "ecb_cbd2",
+            "name": "Ecb Cbd2",
+            "column": "anno",
+            "semantic_type": "year"
+          },
+          {
+            "slug": "ecb_mir",
+            "name": "Ecb Mir",
+            "column": "periodo",
+            "semantic_type": "month"
+          },
+          {
+            "slug": "ecb_mir",
+            "name": "Ecb Mir",
+            "column": "anno",
+            "semantic_type": "year"
+          },
+          {
+            "slug": "wb_financial",
+            "name": "Wb Financial",
+            "column": "anno",
+            "semantic_type": "year"
+          }
+        ],
+        "types": {
+          "year": 6,
+          "month": 5
+        }
+      }
+    },
+    "bridges": [
+      {
+        "from": {
+          "entity": "Indicatore",
+          "dataset": "ecb_cbd2",
+          "via": "indicatore_code"
+        },
+        "to": {
+          "entity": "Progetto",
+          "bridge": "pnrr_indicatori_target",
+          "on": "cup",
+          "semantic_type": "cup_code"
+        }
+      },
+      {
+        "from": {
+          "entity": "Indicatore",
+          "dataset": "wb_financial",
+          "via": "indicatore_code"
+        },
+        "to": {
+          "entity": "Progetto",
+          "bridge": "pnrr_indicatori_target",
+          "on": "cup",
+          "semantic_type": "cup_code"
+        }
+      }
+    ]
+  }
+}

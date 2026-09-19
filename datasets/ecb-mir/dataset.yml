@@ -1,0 +1,61 @@
+root: "../../out"
+schema_version: 1
+
+dataset:
+  name: "ecb_mir"
+  source_id: "ecb"
+  tags: [banche, bce, mir, tassi-interesse, prestiti, depositi]
+  category: economia
+  years: [2026]
+  time_coverage:
+    start_year: 2020
+    end_year: 2026
+
+raw:
+  output_policy: overwrite
+  sources:
+    - name: "ecb_mir_raw"
+      type: "http_file"
+      client:
+        timeout: 120
+        retries: 2
+        user_agent: "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+      args:
+        url: "https://data-api.ecb.europa.eu/service/data/MIR?format=csvdata&startPeriod=2020"
+        filename: "ecb_mir_raw.csv"
+      primary: true
+
+clean:
+  sql: "sql/clean.sql"
+  read:
+    source: auto
+    mode: latest
+    delim: ","
+    encoding: utf-8
+    header: true
+  required_columns:
+    - paese
+    - voce
+    - scadenza
+    - periodo
+    - valore
+    - anno
+    - trimestre
+  validate:
+    min_rows: 1000
+
+mart:
+  tables:
+    - name: "mart_mir_rates"
+      sql: "sql/mart_mir_rates.sql"
+    - name: "mart_mir_snapshot"
+      sql: "sql/mart_mir_snapshot.sql"
+  required_tables: ["mart_mir_rates", "mart_mir_snapshot"]
+  validate:
+    table_rules:
+      mart_mir_rates:
+        not_null: [paese, anno]
+        min_rows: 100
+      mart_mir_snapshot:
+        not_null: [paese]
+        min_rows: 10

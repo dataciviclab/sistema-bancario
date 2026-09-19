@@ -1,0 +1,65 @@
+root: "../../out"
+schema_version: 1
+
+dataset:
+  name: "ecb_bsi"
+  source_id: "ecb"
+  tags: [banche, bce, bsi, bilanci-mfi, depositi, prestiti, moneta]
+  category: economia
+  years: [2026]
+  time_coverage:
+    start_year: 2020
+    end_year: 2026
+
+raw:
+  output_policy: overwrite
+  sources:
+    - name: "ecb_bsi_raw"
+      type: "http_file"
+      client:
+        timeout: 300
+        retries: 2
+        user_agent: "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+      args:
+        url: "https://data-api.ecb.europa.eu/service/data/BSI?format=csvdata&startPeriod=2020"
+        filename: "ecb_bsi_raw.csv"
+      primary: true
+
+clean:
+  sql: "sql/clean.sql"
+  read:
+    source: auto
+    mode: latest
+    delim: ","
+    encoding: utf-8
+    header: true
+  required_columns:
+    - paese
+    - voce
+    - periodo
+    - valore
+    - anno
+    - trimestre
+  validate:
+    min_rows: 1000
+
+mart:
+  tables:
+    - name: "mart_bsi_balance"
+      sql: "sql/mart_bsi_balance.sql"
+    - name: "mart_bsi_deposits"
+      sql: "sql/mart_bsi_deposits.sql"
+    - name: "mart_bsi_snapshot"
+      sql: "sql/mart_bsi_snapshot.sql"
+  required_tables: ["mart_bsi_balance", "mart_bsi_deposits", "mart_bsi_snapshot"]
+  validate:
+    table_rules:
+      mart_bsi_balance:
+        not_null: [paese, anno]
+        min_rows: 100
+      mart_bsi_deposits:
+        not_null: [paese, anno]
+        min_rows: 100
+      mart_bsi_snapshot:
+        not_null: [paese]
+        min_rows: 10

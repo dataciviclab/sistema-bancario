@@ -27,3 +27,6 @@ jobs:
       pull-requests: write
       id-token: write
     secrets: inherit
+
+  env:
+    TOOLKIT_ALLOW_SCRIPT_SOURCE: "1"

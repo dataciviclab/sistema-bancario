@@ -15,9 +15,11 @@ raw:
   output_policy: overwrite
   sources:
     - name: "eba_panel_raw"
-      type: "local_file"
+      type: "script"
       args:
-        path: "raw/eba_panel_raw.parquet"
+        command: "python preprocess.py raw_input.parquet"
+        output: "raw_input.parquet"
+        filename: "raw_input.parquet"
       primary: true
 
 clean:

@@ -22,6 +22,7 @@ jobs:
     with:
       repo-slug: "sistema-bancario"
       run-command: "make run-all"
+      extra-env: "TOOLKIT_ALLOW_SCRIPT_SOURCE=1\nBLOCKED_SOURCE_PROXY=${{ vars.BLOCKED_SOURCE_PROXY }}"
     permissions:
       contents: write
       pull-requests: write

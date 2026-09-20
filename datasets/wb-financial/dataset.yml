@@ -6,7 +6,7 @@ dataset:
   source_id: "worldbank"
   tags: [banche, world-bank, wdi, npl, credito, filiali, storico]
   category: economia
-  years: [2026]
+  years: [2025]
   time_coverage:
     start_year: 1960
     end_year: 2025

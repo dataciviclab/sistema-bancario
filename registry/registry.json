@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "repo": "sistema-bancario",
-  "source_repo": "sistema-bancario",
-  "updated_at": "2026-09-18",
+  "source_repo": "dataciviclab/sistema-bancario",
+  "updated_at": "2026-09-20",
   "datasets": [
     {
       "slug": "banche_unified",
@@ -129,7 +129,7 @@
       ],
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-clean/sistema_bancario/banche_unified/2026/banche_unified_2026_clean.parquet",
+        "path": "gs://dataciviclab-clean/sistema-bancario/banche_unified/2026/banche_unified_2026_clean.parquet",
         "multi_file": false
       },
       "stage": "incubating",
@@ -222,7 +222,7 @@
       ],
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-clean/sistema_bancario/eba_panel/2026/eba_panel_2026_clean.parquet",
+        "path": "gs://dataciviclab-clean/sistema-bancario/eba_panel/2025/eba_panel_2025_clean.parquet",
         "multi_file": false
       },
       "stage": "incubating",
@@ -298,7 +298,7 @@
       ],
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-clean/sistema_bancario/ecb_bls/2026/ecb_bls_2026_clean.parquet",
+        "path": "gs://dataciviclab-clean/sistema-bancario/ecb_bls/2026/ecb_bls_2026_clean.parquet",
         "multi_file": false
       },
       "stage": "incubating",
@@ -394,7 +394,7 @@
       ],
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-clean/sistema_bancario/ecb_bsi/2026/ecb_bsi_2026_clean.parquet",
+        "path": "gs://dataciviclab-clean/sistema-bancario/ecb_bsi/2026/ecb_bsi_2026_clean.parquet",
         "multi_file": false
       },
       "stage": "incubating",
@@ -434,7 +434,8 @@
           "name": "indicatore",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "",
+          "semantic_type": "indicatore_code"
         },
         {
           "name": "periodo",
@@ -495,7 +496,7 @@
       ],
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-clean/sistema_bancario/ecb_cbd2/2026/ecb_cbd2_2026_clean.parquet",
+        "path": "gs://dataciviclab-clean/sistema-bancario/ecb_cbd2/2026/ecb_cbd2_2026_clean.parquet",
         "multi_file": false
       },
       "stage": "incubating",
@@ -590,7 +591,7 @@
       ],
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-clean/sistema_bancario/ecb_mir/2026/ecb_mir_2026_clean.parquet",
+        "path": "gs://dataciviclab-clean/sistema-bancario/ecb_mir/2026/ecb_mir_2026_clean.parquet",
         "multi_file": false
       },
       "stage": "incubating",
@@ -637,13 +638,15 @@
           "name": "indicatore",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "",
+          "semantic_type": "indicatore_code"
         },
         {
           "name": "codice_indicatore",
           "type": "VARCHAR",
           "role": "dimension",
-          "description": ""
+          "description": "",
+          "semantic_type": "indicatore_code"
         },
         {
           "name": "anno",
@@ -661,7 +664,7 @@
       ],
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-clean/sistema_bancario/wb_financial/2026/wb_financial_2026_clean.parquet",
+        "path": "gs://dataciviclab-clean/sistema-bancario/wb_financial/2025/wb_financial_2025_clean.parquet",
         "multi_file": false
       },
       "stage": "incubating",
@@ -678,7 +681,7 @@
       "table": "mart_panorama",
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-mart/sistema_bancario/banche_unified/2026/mart_panorama.parquet",
+        "path": "gs://dataciviclab-mart/sistema-bancario/banche_unified/2026/mart_panorama.parquet",
         "multi_file": false
       }
     },
@@ -688,7 +691,7 @@
       "table": "mart_banche_kpi",
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-mart/sistema_bancario/eba_panel/2026/mart_banche_kpi.parquet",
+        "path": "gs://dataciviclab-mart/sistema-bancario/eba_panel/2025/mart_banche_kpi.parquet",
         "multi_file": false
       }
     },
@@ -698,7 +701,7 @@
       "table": "mart_banche_snapshot",
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-mart/sistema_bancario/eba_panel/2026/mart_banche_snapshot.parquet",
+        "path": "gs://dataciviclab-mart/sistema-bancario/eba_panel/2025/mart_banche_snapshot.parquet",
         "multi_file": false
       }
     },
@@ -708,7 +711,7 @@
       "table": "mart_bls_credit",
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-mart/sistema_bancario/ecb_bls/2026/mart_bls_credit.parquet",
+        "path": "gs://dataciviclab-mart/sistema-bancario/ecb_bls/2026/mart_bls_credit.parquet",
         "multi_file": false
       }
     },
@@ -718,7 +721,7 @@
       "table": "mart_bls_snapshot",
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-mart/sistema_bancario/ecb_bls/2026/mart_bls_snapshot.parquet",
+        "path": "gs://dataciviclab-mart/sistema-bancario/ecb_bls/2026/mart_bls_snapshot.parquet",
         "multi_file": false
       }
     },
@@ -728,7 +731,7 @@
       "table": "mart_bsi_balance",
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-mart/sistema_bancario/ecb_bsi/2026/mart_bsi_balance.parquet",
+        "path": "gs://dataciviclab-mart/sistema-bancario/ecb_bsi/2026/mart_bsi_balance.parquet",
         "multi_file": false
       }
     },
@@ -738,7 +741,7 @@
       "table": "mart_bsi_deposits",
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-mart/sistema_bancario/ecb_bsi/2026/mart_bsi_deposits.parquet",
+        "path": "gs://dataciviclab-mart/sistema-bancario/ecb_bsi/2026/mart_bsi_deposits.parquet",
         "multi_file": false
       }
     },
@@ -748,7 +751,7 @@
       "table": "mart_bsi_snapshot",
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-mart/sistema_bancario/ecb_bsi/2026/mart_bsi_snapshot.parquet",
+        "path": "gs://dataciviclab-mart/sistema-bancario/ecb_bsi/2026/mart_bsi_snapshot.parquet",
         "multi_file": false
       }
     },
@@ -758,7 +761,7 @@
       "table": "mart_bank_kpi",
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-mart/sistema_bancario/ecb_cbd2/2026/mart_bank_kpi.parquet",
+        "path": "gs://dataciviclab-mart/sistema-bancario/ecb_cbd2/2026/mart_bank_kpi.parquet",
         "multi_file": false
       }
     },
@@ -768,7 +771,7 @@
       "table": "mart_bank_snapshot",
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-mart/sistema_bancario/ecb_cbd2/2026/mart_bank_snapshot.parquet",
+        "path": "gs://dataciviclab-mart/sistema-bancario/ecb_cbd2/2026/mart_bank_snapshot.parquet",
         "multi_file": false
       }
     },
@@ -778,7 +781,7 @@
       "table": "mart_mir_rates",
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-mart/sistema_bancario/ecb_mir/2026/mart_mir_rates.parquet",
+        "path": "gs://dataciviclab-mart/sistema-bancario/ecb_mir/2026/mart_mir_rates.parquet",
         "multi_file": false
       }
     },
@@ -788,7 +791,7 @@
       "table": "mart_mir_snapshot",
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-mart/sistema_bancario/ecb_mir/2026/mart_mir_snapshot.parquet",
+        "path": "gs://dataciviclab-mart/sistema-bancario/ecb_mir/2026/mart_mir_snapshot.parquet",
         "multi_file": false
       }
     },
@@ -798,7 +801,7 @@
       "table": "mart_wd_indicators",
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-mart/sistema_bancario/wb_financial/2026/mart_wd_indicators.parquet",
+        "path": "gs://dataciviclab-mart/sistema-bancario/wb_financial/2025/mart_wd_indicators.parquet",
         "multi_file": false
       }
     },
@@ -808,7 +811,7 @@
       "table": "mart_wd_snapshot",
       "location": {
         "type": "gcs",
-        "path": "gs://dataciviclab-mart/sistema_bancario/wb_financial/2026/mart_wd_snapshot.parquet",
+        "path": "gs://dataciviclab-mart/sistema-bancario/wb_financial/2025/mart_wd_snapshot.parquet",
         "multi_file": false
       }
     }
@@ -822,7 +825,7 @@
       "detail": "anno 2026 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20260917T223159Z_d8a52e71",
+        "run_id": "20260920T170930Z_23ec6c7a",
         "year": 2026,
         "status": "SUCCESS",
         "quality_score": {
@@ -836,12 +839,12 @@
         },
         "output_bytes": {
           "raw": 47247,
-          "clean": 38487,
-          "mart": 34720
+          "clean": 37741,
+          "mart": 34338
         },
-        "started_at": "2026-09-17T22:31:59.427714+00:00",
-        "finished_at": "2026-09-17T22:31:59.926649+00:00",
-        "duration_seconds": 0.499
+        "started_at": "2026-09-20T17:09:30.256705+00:00",
+        "finished_at": "2026-09-20T17:09:30.438595+00:00",
+        "duration_seconds": 0.182
       }
     },
     {
@@ -849,11 +852,11 @@
       "source_id": "eba",
       "status": "ok",
       "label": "eba_panel",
-      "detail": "anno 2026 — mart: si",
+      "detail": "anno 2025 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20260917T220202Z_56803605",
-        "year": 2026,
+        "run_id": "20260920T170530Z_640cb47a",
+        "year": 2025,
         "status": "SUCCESS",
         "quality_score": {
           "raw": 100,
@@ -866,12 +869,12 @@
         },
         "output_bytes": {
           "raw": 155561608,
-          "clean": 2379245,
-          "mart": 208269
+          "clean": 2379317,
+          "mart": 208281
         },
-        "started_at": "2026-09-17T22:02:02.523163+00:00",
-        "finished_at": "2026-09-17T22:02:16.721517+00:00",
-        "duration_seconds": 14.198
+        "started_at": "2026-09-20T17:05:30.231549+00:00",
+        "finished_at": "2026-09-20T17:05:35.395869+00:00",
+        "duration_seconds": 5.164
       }
     },
     {
@@ -882,7 +885,7 @@
       "detail": "anno 2026 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20260917T220220Z_947ea348",
+        "run_id": "20260920T170539Z_85344b0a",
         "year": 2026,
         "status": "SUCCESS",
         "quality_score": {
@@ -897,12 +900,12 @@
         },
         "output_bytes": {
           "raw": 539897497,
-          "clean": 1596590,
-          "mart": 36677
+          "clean": 1596817,
+          "mart": 36682
         },
-        "started_at": "2026-09-17T22:02:20.962184+00:00",
-        "finished_at": "2026-09-17T22:03:04.081863+00:00",
-        "duration_seconds": 43.12
+        "started_at": "2026-09-20T17:05:39.874775+00:00",
+        "finished_at": "2026-09-20T17:06:05.722499+00:00",
+        "duration_seconds": 25.848
       }
     },
     {
@@ -913,7 +916,7 @@
       "detail": "anno 2026 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20260917T220359Z_e70a27cd",
+        "run_id": "20260920T170611Z_eaeb2c78",
         "year": 2026,
         "status": "SUCCESS",
         "quality_score": {
@@ -923,17 +926,17 @@
         },
         "output_rows": {
           "raw": 3492969,
-          "clean": 865602,
+          "clean": 1429726,
           "mart": 1649
         },
         "output_bytes": {
           "raw": 1953166384,
-          "clean": 4781330,
-          "mart": 32603
+          "clean": 7126937,
+          "mart": 31194
         },
-        "started_at": "2026-09-17T22:03:59.614984+00:00",
-        "finished_at": "2026-09-17T22:08:51.990522+00:00",
-        "duration_seconds": 292.376
+        "started_at": "2026-09-20T17:06:11.816809+00:00",
+        "finished_at": "2026-09-20T17:07:49.462682+00:00",
+        "duration_seconds": 97.646
       }
     },
     {
@@ -944,21 +947,27 @@
       "detail": "anno 2026 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20260917T222829Z_3f89dd60",
+        "run_id": "20260920T170756Z_660299db",
         "year": 2026,
         "status": "SUCCESS",
         "quality_score": {
+          "raw": 100,
+          "clean": 95,
           "mart": 100
         },
         "output_rows": {
+          "raw": 1529444,
+          "clean": 1416526,
           "mart": 1355
         },
         "output_bytes": {
+          "raw": 1174806498,
+          "clean": 6720247,
           "mart": 51390
         },
-        "started_at": "2026-09-17T22:28:29.925845+00:00",
-        "finished_at": "2026-09-17T22:28:30.259849+00:00",
-        "duration_seconds": 0.334
+        "started_at": "2026-09-20T17:07:56.070259+00:00",
+        "finished_at": "2026-09-20T17:08:48.506771+00:00",
+        "duration_seconds": 52.437
       }
     },
     {
@@ -969,7 +978,7 @@
       "detail": "anno 2026 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20260917T221124Z_9099ec55",
+        "run_id": "20260920T170852Z_ac9553a2",
         "year": 2026,
         "status": "SUCCESS",
         "quality_score": {
@@ -984,12 +993,12 @@
         },
         "output_bytes": {
           "raw": 368563968,
-          "clean": 1333718,
-          "mart": 25381
+          "clean": 1335329,
+          "mart": 25380
         },
-        "started_at": "2026-09-17T22:11:24.740923+00:00",
-        "finished_at": "2026-09-17T22:11:52.061103+00:00",
-        "duration_seconds": 27.32
+        "started_at": "2026-09-20T17:08:52.765233+00:00",
+        "finished_at": "2026-09-20T17:09:13.319337+00:00",
+        "duration_seconds": 20.554
       }
     },
     {
@@ -997,11 +1006,11 @@
       "source_id": "worldbank",
       "status": "ok",
       "label": "wb_financial",
-      "detail": "anno 2026 — mart: si",
+      "detail": "anno 2025 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20260917T221152Z_284983dc",
-        "year": 2026,
+        "run_id": "20260920T170913Z_58399ab3",
+        "year": 2025,
         "status": "SUCCESS",
         "quality_score": {
           "raw": 100,
@@ -1009,18 +1018,18 @@
           "mart": 100
         },
         "output_rows": {
-          "raw": 19081,
+          "raw": 396971,
           "clean": 10922,
           "mart": 2718
         },
         "output_bytes": {
-          "raw": 11653498,
-          "clean": 87017,
-          "mart": 93817
+          "raw": 198481686,
+          "clean": 87208,
+          "mart": 93948
         },
-        "started_at": "2026-09-17T22:11:52.981243+00:00",
-        "finished_at": "2026-09-17T22:12:00.632747+00:00",
-        "duration_seconds": 7.652
+        "started_at": "2026-09-20T17:09:13.639354+00:00",
+        "finished_at": "2026-09-20T17:09:29.926059+00:00",
+        "duration_seconds": 16.287
       }
     }
   ],

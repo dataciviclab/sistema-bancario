@@ -1,23 +1,22 @@
 #!/usr/bin/env python3
-"""Download World Bank WDI Financial Sector data.
+"""Download World Bank WDI data (bulk CSV).
 
 Output: raw_input.csv nella directory raw del toolkit.
-Usa curl per il download — più robusto di requests su CI.
+Usa il bulk download WDI_CSV.zip — più affidabile del topic API.
 """
 
-import csv
 import subprocess
 import sys
 import zipfile
 from pathlib import Path
 
-URL = "https://api.worldbank.org/v2/en/topic/7?downloadformat=csv"
+URL = "https://databank.worldbank.org/data/download/WDI_CSV.zip"
 UA = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 
 
 def main(output_path: str) -> None:
-    print("Downloading World Bank WDI Financial Sector...")
-    zip_path = Path(output_path).parent / "wb_financial_raw.zip"
+    print("Downloading World Bank WDI (bulk CSV)...")
+    zip_path = Path(output_path).parent / "wdi_bulk.zip"
 
     result = subprocess.run(
         [
@@ -39,15 +38,14 @@ def main(output_path: str) -> None:
     zip_size = zip_path.stat().st_size
     print(f"Downloaded ZIP ({zip_size} bytes)")
 
-    print("Extracting main data file from ZIP...")
+    print("Extracting WDICSV.csv from ZIP...")
     with zipfile.ZipFile(zip_path) as z:
-        data_files = [n for n in z.namelist()
-                      if n.endswith(".csv") and not n.startswith("Metadata_")]
-        if not data_files:
-            print("Error: no data CSV found in ZIP", file=sys.stderr)
+        csv_files = [n for n in z.namelist() if n.endswith(".csv") and "WDICSV" in n.upper()]
+        if not csv_files:
+            print("Error: WDICSV.csv not found in ZIP", file=sys.stderr)
             sys.exit(1)
 
-        with z.open(data_files[0]) as src:
+        with z.open(csv_files[0]) as src:
             content = src.read()
             with open(output_path, "wb") as dst:
                 dst.write(content)

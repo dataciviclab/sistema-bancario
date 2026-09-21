@@ -1,11 +1,11 @@
 [build-system]
-requires = ["setuptools"]
+requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "sistema-bancario"
+name = "dataciviclab-sistema-bancario"
 version = "0.1.0"
-description = "Intelligence sul sistema bancario europeo — BCE, World Bank, Banca d'Italia"
+description = "Sistema bancario italiano — dati banche e intermediari"
 readme = "README.md"
 requires-python = ">=3.12"
 license = "MIT"
@@ -25,27 +25,18 @@ dev = [
 ]
 pipeline = [
     "dataciviclab-toolkit @ git+https://github.com/dataciviclab/toolkit.git",
-    "lab-connectors[duckdb] @ git+https://github.com/dataciviclab/lab-connectors.git",
-    "pytest>=8.0",
 ]
 dashboard = [
     "streamlit>=1.61",
     "plotly>=5.18",
     "altair>=6.2",
     "pandas>=3.0",
+    "duckdb>=1.5.3",
     "lab-connectors[duckdb] @ git+https://github.com/dataciviclab/lab-connectors.git",
 ]
 
 [project.urls]
 Home = "https://github.com/dataciviclab/sistema-bancario"
 
-[tool.pytest.ini_options]
-markers = [
-    "contract: interfaccia pubblica, artifact format, contratto API, path contract, output CI",
-    "policy: regola Lab non ovvia o comportamento cross-component",
-    "regression: bug fix documentato in issue/PR",
-    "smoke: test che fa chiamate reali (richiede connettivita')",
-]
-
 [tool.toolkit.extends]
-source_id = "sistema_bancario"
+source_id = "sistema-bancario"

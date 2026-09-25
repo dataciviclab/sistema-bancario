@@ -13,7 +13,7 @@ from lab_connectors.registry import load_registry
 _REPO_ROOT = Path(__file__).parent.parent
 _LOCAL_DATA = _REPO_ROOT / "out" / "data"
 LOCAL_ROOT = str(_LOCAL_DATA) if _LOCAL_DATA.is_dir() else None
-PREFIX = "sistema_bancario/"
+PREFIX = "sistema-bancario/"
 _registry = load_registry(_REPO_ROOT / "registry" / "registry.json")
 
 

@@ -3,6 +3,7 @@ Sistema Bancario Intelligence - Dashboard Streamlit
 """
 
 import streamlit as st
+from lab_connectors.branding import apply_branding
 
 st.set_page_config(
     page_title="Sistema Bancario - Dashboard",
@@ -11,9 +12,9 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-st.sidebar.markdown("---")
-st.sidebar.caption("Fonti: ECB Data Portal (CBD2, BSI, MIR)")
-st.sidebar.caption("[DataCivicLab](https://dataciviclab.org/) · CC BY 4.0")
+apply_branding(
+    repo_name="sistema-bancario", repo_url="https://github.com/dataciviclab/sistema-bancario"
+)
 
 pages = {
     "": [

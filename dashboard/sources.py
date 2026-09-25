@@ -17,9 +17,17 @@ PREFIX = "sistema_bancario/"
 _registry = load_registry(_REPO_ROOT / "registry" / "registry.json")
 
 
+def _latest_year(slug: str) -> int:
+    """Restituisce l'anno più recente disponibile per uno slug dal registry."""
+    years = years_from_registry(_registry, slug=slug)
+    if not years:
+        raise ValueError(f"Dataset {slug} non trovato nel registry")
+    return max(years)
+
+
 def _years(slug: str) -> list[int]:
     """Anni disponibili per uno slug dal registry."""
-    return years_from_registry(_registry)  # slug)
+    return years_from_registry(_registry, slug=slug)
 
 
 def _mart(slug: str, table: str, year: int | None = None) -> pd.DataFrame:
@@ -143,12 +151,12 @@ def load_tassi_granular() -> pd.DataFrame:
 
 @st.cache_data(ttl=3600, show_spinner=False)
 def load_wb_snapshot() -> pd.DataFrame:
-    return _mart("wb_financial", "mart_wd_snapshot", 2026)
+    return _mart("wb_financial", "mart_wd_snapshot", _latest_year("wb_financial"))
 
 
 @st.cache_data(ttl=3600, show_spinner=False)
 def load_wb_indicators() -> pd.DataFrame:
-    return _mart("wb_financial", "mart_wd_indicators", 2026)
+    return _mart("wb_financial", "mart_wd_indicators", _latest_year("wb_financial"))
 
 
 # --- BLS: Condizioni di credito ---
@@ -174,9 +182,9 @@ def load_panorama() -> pd.DataFrame:
 
 @st.cache_data(ttl=3600, show_spinner=False)
 def load_banche_kpi() -> pd.DataFrame:
-    return _mart("eba_panel", "mart_banche_kpi", 2026)
+    return _mart("eba_panel", "mart_banche_kpi", _latest_year("eba_panel"))
 
 
 @st.cache_data(ttl=3600, show_spinner=False)
 def load_banche_snapshot() -> pd.DataFrame:
-    return _mart("eba_panel", "mart_banche_snapshot", 2026)
+    return _mart("eba_panel", "mart_banche_snapshot", _latest_year("eba_panel"))

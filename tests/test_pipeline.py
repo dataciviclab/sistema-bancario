@@ -1,9 +1,28 @@
 """Pipeline smoke tests — verifica che i mart esistano e abbiano dati."""
 
 import pathlib
+import json
 import pytest
 
 MART_DIR = pathlib.Path(__file__).parent.parent / "out" / "data" / "mart"
+REGISTRY_PATH = pathlib.Path(__file__).parent.parent / "registry" / "registry.json"
+
+
+def _load_registry():
+    """Carica il registry e restituisce la mappa slug -> anno più recente."""
+    with open(REGISTRY_PATH, encoding="utf-8") as f:
+        data = json.load(f)
+    year_map = {}
+    for ds in data.get("datasets", []):
+        slug = ds.get("slug")
+        period = ds.get("period", {})
+        end = period.get("end")
+        if slug and end:
+            year_map[slug] = int(end)
+    return year_map
+
+
+YEAR_MAP = _load_registry()
 
 EXPECTED_MARTS = [
     ("ecb_cbd2", "mart_bank_kpi.parquet"),
@@ -26,8 +45,9 @@ EXPECTED_MARTS = [
 @pytest.mark.contract
 @pytest.mark.parametrize("slug,table", EXPECTED_MARTS)
 def test_mart_exists(slug, table):
-    """Ogni mart deve esistere nella directory out/data/mart/{slug}/2026/."""
-    mart_file = MART_DIR / slug / "2026" / table
+    """Ogni mart deve esistere nella directory out/data/mart/{slug}/{year}/."""
+    year = YEAR_MAP.get(slug, 2026)
+    mart_file = MART_DIR / slug / str(year) / table
     assert mart_file.exists(), f"Mart mancante: {mart_file}"
 
 
@@ -35,7 +55,8 @@ def test_mart_exists(slug, table):
 @pytest.mark.parametrize("slug,table", EXPECTED_MARTS)
 def test_mart_non_empty(slug, table):
     """Ogni mart deve avere almeno 1 riga."""
-    mart_file = MART_DIR / slug / "2026" / table
+    year = YEAR_MAP.get(slug, 2026)
+    mart_file = MART_DIR / slug / str(year) / table
     if not mart_file.exists():
         pytest.skip(f"Mart non trovato: {mart_file}")
     import duckdb

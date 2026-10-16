@@ -26,6 +26,10 @@ dev = [
 pipeline = [
     "dataciviclab-toolkit @ git+https://github.com/dataciviclab/toolkit.git",
 ]
+# Catalog engine per-repo (probe, inventory, source report).
+observatory = [
+    "dataciviclab-source-observatory @ git+https://github.com/dataciviclab/source-observatory.git@main",
+]
 dashboard = [
     "streamlit>=1.61",
     "plotly>=5.18",
@@ -40,3 +44,11 @@ Home = "https://github.com/dataciviclab/sistema-bancario"
 
 [tool.toolkit.extends]
 source_id = "sistema-bancario"
+
+[tool.observatory]
+source_id = "ecb"
+protocol = "sdmx"
+base_url = "https://data-api.ecb.europa.eu/service/dataflow/all/all/latest"
+observation_mode = "catalog-watch"
+verdict = "go"
+note = "Catalogo SDMX ECB (data-api.ecb.europa.eu). Il repo consuma 4 dataflow via http_file (BLS, BSI, CBD2, MIR) con format=csvdata. Attenzione: toolkit.extends dichiara 'sistema-bancario', i dataset.yml usano 'ecb'."

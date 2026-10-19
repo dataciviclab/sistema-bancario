@@ -1,6 +1,6 @@
 {
   "source_id": "ecb",
-  "generated_at": "2026-10-12T14:20:46+00:00",
+  "generated_at": "2026-10-19T10:31:40+00:00",
   "report_version": 1,
   "timing": {},
   "identity": {
@@ -11,19 +11,19 @@
     "observation_mode": "catalog-watch",
     "verdict": "go",
     "note": "Catalogo SDMX ECB (data-api.ecb.europa.eu). Il repo consuma 4 dataflow via http_file (BLS, BSI, CBD2, MIR) con format=csvdata. Attenzione: toolkit.extends dichiara 'sistema-bancario', i dataset.yml usano 'ecb'.",
-    "last_probed": "2026-10-12"
+    "last_probed": "2026-10-19"
   },
   "health": {
     "radar_status": "GREEN",
     "http_code": "200",
     "note": null,
     "ssl_fallback": false,
-    "streak": 2
+    "streak": 3
   },
   "inventory": {
     "total_items": 215,
     "method": null,
-    "captured_at": "2026-10-12T14:20:45+00:00",
+    "captured_at": "2026-10-19T10:31:39+00:00",
     "baseline_value": null,
     "baseline_date": null,
     "freshness_hours": 0.0,
@@ -34,19 +34,56 @@
     }
   },
   "source_check": {
-    "last_run": null,
-    "total_scored": 0,
-    "reachable": 0,
+    "last_run": "2026-10-19T10:31:40Z",
+    "total_scored": 191,
+    "reachable": 191,
     "csv_count": 0,
     "with_csv_schema": 0,
-    "avg_readiness": null,
-    "top_items": [],
-    "coverage_pct": null,
+    "avg_readiness": 5.0,
+    "top_items": [
+      {
+        "name": "ecb/aggregated-balance-sheet-of-euro-area-insurance-corporations-and-pension-fundseu",
+        "score": 5,
+        "year_range": null,
+        "format": "SDMX",
+        "reachable": true
+      },
+      {
+        "name": "ecb/aggregated-balance-sheet-of-euro-area-monetary-financial-institutions-excluding-",
+        "score": 5,
+        "year_range": null,
+        "format": "SDMX",
+        "reachable": true
+      },
+      {
+        "name": "ecb/balance-of-payments-and-international-investment-position",
+        "score": 5,
+        "year_range": null,
+        "format": "SDMX",
+        "reachable": true
+      },
+      {
+        "name": "ecb/balance-of-payments-and-international-investment-position-bpm6",
+        "score": 5,
+        "year_range": null,
+        "format": "SDMX",
+        "reachable": true
+      },
+      {
+        "name": "ecb/balance-of-payments-and-international-investment-position-bpm6-published-series",
+        "score": 5,
+        "year_range": null,
+        "format": "SDMX",
+        "reachable": true
+      }
+    ],
+    "coverage_pct": 88.8,
     "formato_aperto": {
-      "score": 20.0,
+      "score": 5.0,
       "perc_aperto": 0.0,
-      "total": 215,
-      "fonte": "inventory"
+      "perc_reachable": 100.0,
+      "total": 191,
+      "fonte": "source_check"
     }
   },
   "datasets_in_use": [

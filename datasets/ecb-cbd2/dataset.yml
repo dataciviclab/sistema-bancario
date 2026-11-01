@@ -4,8 +4,9 @@ schema_version: 1
 dataset:
   name: "ecb_cbd2"
   source_id: "ecb"
-  tags: [banche, bce, cbd2, sistema-bancario, europa]
+  tags: [banche, bce, cbd2, sistema-bancario, europa, kpi]
   category: economia
+  description: "KPI del sistema bancario per paese: redditività, capitale, NPL per settore controparte, liquidità (BCE, 2015-2026)"
   years: [2026]
   time_coverage:
     start_year: 2015
@@ -14,34 +15,49 @@ dataset:
 raw:
   output_policy: overwrite
   sources:
-    - name: "ecb_cbd2_raw"
+    # Due pull mirati invece del dataflow completo (~1,2 GB):
+    # 1) aggregati nazionali (framework A, settore controparte _Z)
+    # 2) scomposizioni per settore controparte (framework F: famiglie,
+    #    imprese, governo, non finanziario) — la BCE le pubblica solo cosi'
+    - name: "ecb_cbd2_aggregati"
       type: "http_file"
       client:
-        timeout: 120
+        timeout: 300
         retries: 2
         user_agent: "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
       args:
-        url: "https://data-api.ecb.europa.eu/service/data/CBD2?format=csvdata&startPeriod=2015"
-        filename: "ecb_cbd2_raw.csv"
+        url: "https://data-api.ecb.europa.eu/service/data/CBD2/Q..W0.11._Z._Z.A..I2003+I2004+I2100+I2410+I3006+I3017+I3160+I3631+I3632+I4001+I4002+I4008._Z._Z._Z._Z._Z._Z.PC?format=csvdata&startPeriod=2015-01"
+        filename: "ecb_cbd2_aggregati.csv"
       primary: true
+    - name: "ecb_cbd2_settori"
+      type: "http_file"
+      client:
+        timeout: 300
+        retries: 2
+        user_agent: "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+      args:
+        url: "https://data-api.ecb.europa.eu/service/data/CBD2/Q..W0.11.S1M+S11+S13+S1U._Z.A.F.I3160+I3632._Z._Z._Z._Z._Z._Z.PC?format=csvdata&startPeriod=2015-01"
+        filename: "ecb_cbd2_settori.csv"
 
 clean:
   sql: "sql/clean.sql"
   read:
     source: auto
-    mode: latest
+    # mode: all → il clean legge entrambi i raw e li concatena in raw_input
+    mode: all
     delim: ","
     encoding: utf-8
     header: true
   required_columns:
     - paese
-    - indicatore
+    - metrica
     - periodo
     - valore
     - anno
     - trimestre
+    - serie_id
   validate:
-    min_rows: 1000
+    min_rows: 5000
 
 mart:
   tables:
@@ -53,8 +69,10 @@ mart:
   validate:
     table_rules:
       mart_bank_kpi:
-        not_null: [paese, anno]
-        min_rows: 100
+        # Copertura reale verificata in tests/test_mart_contract.py (>=95%):
+        # i buchi residui sono nazionali (BG 2015, CZ 2015, SK 2016-17, GB, LT).
+        not_null: [paese, anno, trimestre]
+        min_rows: 200
       mart_bank_snapshot:
-        not_null: [paese, anno]
-        min_rows: 10
+        not_null: [paese, roe_pct]
+        min_rows: 20

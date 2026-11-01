@@ -1,0 +1,11 @@
+metrica,serie_id,descrizione,unita,moltiplicatore
+tasso_mutuo,A2C|B|A|R|A|2250|EUR|N,"Tasso sui nuovi mutui casa delle famiglie (tutte le durate)","% annuo",1
+tasso_mutuo_variabile,A2C|B|F|R|A|2250|EUR|N,"Tasso sui nuovi mutui casa a tasso variabile (fino a 1 anno)","% annuo",1
+tasso_mutuo_fisso_1_5a,A2C|B|I|R|A|2250|EUR|N,"Tasso sui nuovi mutui casa a tasso fisso (1-5 anni)","% annuo",1
+tasso_mutuo_fisso_5_10a,A2C|B|O|R|A|2250|EUR|N,"Tasso sui nuovi mutui casa a tasso fisso (5-10 anni)","% annuo",1
+tasso_imprese,A2A|B|A|R|A|2240|EUR|N,"Tasso sui nuovi prestiti alle imprese (tutti gli importi)","% annuo",1
+tasso_imprese_piccole,A2A|B|A|R|2|2240|EUR|N,"Tasso sui nuovi prestiti alle imprese fino a 0,25 mln","% annuo",1
+tasso_consumo,A2B|B|A|R|A|2250|EUR|N,"Tasso sui nuovi prestiti al consumo delle famiglie","% annuo",1
+tasso_depositi_overnight,L21|B|A|R|A|2250|EUR|N,"Tasso sui depositi a vista delle famiglie","% annuo",1
+tasso_depositi_scadenza,L22|B|A|R|A|2250|EUR|N,"Tasso sui depositi a scadenza delle famiglie","% annuo",1
+tasso_depositi_preavviso,L23|B|A|R|A|2250|EUR|N,"Tasso sui depositi con preavviso delle famiglie","% annuo",1

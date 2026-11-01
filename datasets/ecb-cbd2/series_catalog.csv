@@ -1,0 +1,16 @@
+metrica,serie_id,descrizione,unita,moltiplicatore
+roe,I2003|11|W0|_Z|_Z|A|A|_Z|_Z|_Z|_Z|_Z|_Z|PC,"Return on equity delle banche domestiche","%",1
+roa,I2004|11|W0|_Z|_Z|A|A|_Z|_Z|_Z|_Z|_Z|_Z|PC,"Return on assets delle banche domestiche","%",1
+costo_reddito,I2100|11|W0|_Z|_Z|A|A|_Z|_Z|_Z|_Z|_Z|_Z|PC,"Cost-to-income ratio (la BCE lo pubblica con segno negativo: qui e' normalizzato positivo)","%",-1
+margine_interesse,I2410|11|W0|_Z|_Z|A|A|_Z|_Z|_Z|_Z|_Z|_Z|PC,"Margine di interesse su attivo","%",1
+cet1,I4008|11|W0|_Z|_Z|A|A|_Z|_Z|_Z|_Z|_Z|_Z|PC,"Common Equity Tier 1 ratio","%",1
+tier1,I4002|11|W0|_Z|_Z|A|A|_Z|_Z|_Z|_Z|_Z|_Z|PC,"Tier 1 ratio","%",1
+solvency,I4001|11|W0|_Z|_Z|A|A|_Z|_Z|_Z|_Z|_Z|_Z|PC,"Solvency ratio (capitale totale sui RWA)","%",1
+npl,I3632|11|W0|_Z|_Z|A|F|_Z|_Z|_Z|_Z|_Z|_Z|PC,"NPL ratio lordo su prestiti lordi, totale banche domestiche","%",1
+npl_famiglie,I3632|11|W0|S1M|_Z|A|F|_Z|_Z|_Z|_Z|_Z|_Z|PC,"NPL ratio lordo su famiglie","%",1
+npl_imprese,I3632|11|W0|S11|_Z|A|F|_Z|_Z|_Z|_Z|_Z|_Z|PC,"NPL ratio lordo su societa' non finanziarie","%",1
+copertura_npl,I3631|11|W0|_Z|_Z|A|A|_Z|_Z|_Z|_Z|_Z|_Z|PC,"Copertura delle sofferenze (accantonamenti su NPL)","%",1
+lcr,I3017|11|W0|_Z|_Z|A|A|_Z|_Z|_Z|_Z|_Z|_Z|PC,"Liquidity Coverage Ratio","%",1
+prestiti_depositi,I3006|11|W0|_Z|_Z|A|A|_Z|_Z|_Z|_Z|_Z|_Z|PC,"Rapporto prestiti/depositi","%",1
+prestiti_attivo,I3160|11|W0|_Z|_Z|A|A|_Z|_Z|_Z|_Z|_Z|_Z|PC,"Rapporto prestiti/attivo","%",1
+prestiti_attivo_nonfin,I3160|11|W0|S1U|_Z|A|F|_Z|_Z|_Z|_Z|_Z|_Z|PC,"Rapporto prestiti/attivo verso settori non finanziari","%",1

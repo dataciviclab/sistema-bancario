@@ -133,20 +133,6 @@ def load_tassi_all() -> pd.DataFrame:
     return pd.concat(frames, ignore_index=True) if frames else pd.DataFrame()
 
 
-@st.cache_data(ttl=3600, show_spinner=False)
-def load_tassi_granular() -> pd.DataFrame:
-    """Carica dati MIR granulari (tutte le scadenze) dal clean layer."""
-    frames = []
-    for y in _years("ecb_mir"):
-        try:
-            df = pd.read_parquet(f"{LOCAL_ROOT}/clean/ecb_mir/{y}/ecb_mir_{y}_clean.parquet")
-            if not df.empty:
-                frames.append(df)
-        except Exception:
-            pass
-    return pd.concat(frames, ignore_index=True) if frames else pd.DataFrame()
-
-
 # --- World Bank: Indicatori storici ---
 
 @st.cache_data(ttl=3600, show_spinner=False)

@@ -4,24 +4,28 @@ schema_version: 1
 dataset:
   name: "ecb_bls"
   source_id: "ecb"
-  tags: [banche, bce, bls, credit-standards, domanda-credito]
+  tags: [banche, bce, bls, credito, survey, sistema-bancario]
   category: economia
+  description: "Bank Lending Survey: condizioni e domanda di credito per imprese e famiglie, indici di diffusione (BCE, 2003-2026)"
   years: [2026]
   time_coverage:
-    start_year: 2007
+    start_year: 2003
     end_year: 2026
 
 raw:
   output_policy: overwrite
   sources:
+    # Key SDMX dichiarata: le 11 serie del catalogo, non l'intera survey
+    # (~11 MB invece di ~550 MB). Dimensioni BLS: item x tipo cliente x
+    # dettaglio x orizzonte x dominio x ruolo x metodo di aggregazione.
     - name: "ecb_bls_raw"
       type: "http_file"
       client:
-        timeout: 120
+        timeout: 300
         retries: 2
         user_agent: "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
       args:
-        url: "https://data-api.ecb.europa.eu/service/data/BLS?format=csvdata"
+        url: "https://data-api.ecb.europa.eu/service/data/BLS/Q..ALL.O+SME+LE+Z+MAL+MRL+NIC.E+H.Z+H+C.B3.ST+ZZ+TC+RA.S+D.DINX?format=csvdata&startPeriod=2003-01"
         filename: "ecb_bls_raw.csv"
       primary: true
 
@@ -35,13 +39,14 @@ clean:
     header: true
   required_columns:
     - paese
-    - voce
+    - metrica
     - periodo
     - valore
     - anno
     - trimestre
+    - serie_id
   validate:
-    min_rows: 1000
+    min_rows: 10000
 
 mart:
   tables:
@@ -53,8 +58,8 @@ mart:
   validate:
     table_rules:
       mart_bls_credit:
-        not_null: [paese, anno]
-        min_rows: 100
+        not_null: [paese, anno, trimestre, cs_imprese]
+        min_rows: 500
       mart_bls_snapshot:
-        not_null: [paese]
-        min_rows: 10
+        not_null: [paese, cs_imprese]
+        min_rows: 15

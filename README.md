@@ -20,14 +20,27 @@ Sistema di intelligence sul sistema bancario europeo: raccoglie dati regolatori 
 
 ## Dataset
 
-| Dataset | Fonte | Anni | Mart | Descrizione |
+| Dataset | Fonte | Anni (reali) | Mart | Descrizione |
 |---|---|---|---|---|
-| ecb_cbd2 | BCE SDMX | 2015-2025 | 2 | Consolidated Banking Data: profittabilità, NPL, CET1, liquidità |
-| ecb_bsi | BCE SDMX | 2020-2025 | 3 | Balance Sheet Items: bilanci MFI, aggregati monetari |
-| ecb_mir | BCE SDMX | 2020-2025 | 2 | MFI Interest Rates: tassi attivi/passivi |
-| ecb_bls | BCE SDMX | 2007-2025 | 2 | Bank Lending Survey: condizioni di credito |
-| wb_financial | World Bank | 1960-2025 | 2 | NPL, credito/PIL, filiali, ATM |
-| eba_panel | EBA | 2012-2025 | 2 | Dati per singola banca: CET1, ROE, leverage |
+| ecb_cbd2 | BCE SDMX | 2015-2026 | 2 | Consolidated Banking Data: redditività, capitale, NPL per settore, liquidità |
+| ecb_bsi | BCE SDMX | 2003-2026 | 3 | Balance Sheet Items: attivo, prestiti, depositi per detentore |
+| ecb_mir | BCE SDMX | 2003-2026 | 2 | Tassi attivi/passivi su mutui, imprese, consumo, depositi |
+| ecb_bls | BCE SDMX | 2003-2026 | 2 | Bank Lending Survey: condizioni e domanda di credito (indici di diffusione) |
+| wb_financial | World Bank | 1960-2025 | 2 | NPL, credito/PIL, filiali, ATM per 100k abitanti |
+| eba_panel | EBA | 2012-2025 | 2 | Dati per singola banca: CET1, ROE, leverage, esposizioni per paese |
+
+### Contratto delle serie
+
+Ogni colonna di un mart corrisponde a **una serie dichiarata** in
+`datasets/<dataset>/series_catalog.csv`: nome metrica, serie SDMX, descrizione,
+unità e moltiplicatore. Niente medie tra serie diverse.
+
+- Il raw è scaricato con una **key SDMX mirata** (pochi MB invece del dataflow
+  intero da 1-2 GB).
+- Il clean tiene solo le serie del catalogo e fallisce in modo rumoroso se una
+  serie sparisce (è già successo: la voce `A20T` non esiste più).
+- I test in `tests/test_mart_contract.py` fissano i valori golden e la copertura
+  minima: un numero sbagliato rompe la CI, non arriva in dashboard.
 
 ### Compose
 
@@ -56,8 +69,12 @@ make run-all     # Tutti i dataset + compose
 make seeds       # Solo dataset
 make run-compose # Solo compose
 make dashboard   # Avvia dashboard
-make test        # Test
+make test        # Test di contratto sui mart
 ```
+
+> I `clean.sql` leggono il catalogo con path relativo alla root del repo
+> (`datasets/ecb-bsi/series_catalog.csv`): esegui i comandi dalla root del repo,
+> come fanno `make` e la CI.
 
 ## Struttura
 

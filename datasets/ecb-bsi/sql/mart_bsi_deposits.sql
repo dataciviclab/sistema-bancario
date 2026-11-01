@@ -1,28 +1,37 @@
--- mart_bsi_deposits: Composizione depositi per paese/trimestre
+-- mart_bsi_deposits: chi tiene i depositi
+--
+-- La vecchia versione divideva i depositi per scadenza (conti correnti, a
+-- scadenza, preavviso) prendendo la media di serie mensili con decine di
+-- controparti diverse: numeri non verificabili. La BCE non pubblica quel
+-- totale trimestrale come serie unica; pubblica invece la scomposizione per
+-- detentore, che qui e' dichiarata serie per serie.
+
+WITH serie AS (
+    SELECT
+        paese,
+        anno,
+        trimestre,
+        MAX(CASE WHEN metrica = 'depositi' THEN valore END) AS depositi_totali_mld,
+        MAX(CASE WHEN metrica = 'depositi_famiglie_imprese' THEN valore END) AS depositi_famiglie_imprese_mld,
+        MAX(CASE WHEN metrica = 'depositi_banche' THEN valore END) AS depositi_banche_mld,
+        MAX(CASE WHEN metrica = 'depositi_governo_centrale' THEN valore END) AS depositi_governo_centrale_mld
+    FROM clean_input
+    WHERE trimestre IS NOT NULL
+      AND LENGTH(paese) = 2
+      AND paese NOT IN ('U2', 'U5', '4F')
+    GROUP BY paese, anno, trimestre
+)
 
 SELECT
     paese,
     anno,
     trimestre,
-    -- Depositi (miliardi EUR, media trimestrale)
-    ROUND(AVG(CASE WHEN voce = 'L20' THEN valore / 1000 END), 1) AS deposits_totali_mld,
-    ROUND(AVG(CASE WHEN voce = 'L21' THEN valore / 1000 END), 1) AS deposits_overnight_mld,
-    ROUND(AVG(CASE WHEN voce = 'L22' THEN valore / 1000 END), 1) AS deposits_a_scadenza_mld,
-    ROUND(AVG(CASE WHEN voce = 'L23' THEN valore / 1000 END), 1) AS deposits_preavviso_mld,
-    -- Composizione
-    ROUND(
-        AVG(CASE WHEN voce = 'L21' THEN valore END) /
-        NULLIF(AVG(CASE WHEN voce = 'L20' THEN valore END), 0) * 100
-    , 1) AS pct_overnight,
-    ROUND(
-        AVG(CASE WHEN voce = 'L22' THEN valore END) /
-        NULLIF(AVG(CASE WHEN voce = 'L20' THEN valore END), 0) * 100
-    , 1) AS pct_scadenza,
-    ROUND(
-        AVG(CASE WHEN voce = 'L23' THEN valore END) /
-        NULLIF(AVG(CASE WHEN voce = 'L20' THEN valore END), 0) * 100
-    , 1) AS pct_preavviso
-FROM clean_input
-WHERE frequenza = 'Q' OR (frequenza = 'M' AND trimestre IS NOT NULL)
-GROUP BY paese, anno, trimestre
+    ROUND(depositi_totali_mld, 1) AS depositi_totali_mld,
+    ROUND(depositi_famiglie_imprese_mld, 1) AS depositi_famiglie_imprese_mld,
+    ROUND(depositi_banche_mld, 1) AS depositi_banche_mld,
+    ROUND(depositi_governo_centrale_mld, 1) AS depositi_governo_centrale_mld,
+    ROUND(depositi_famiglie_imprese_mld / NULLIF(depositi_totali_mld, 0) * 100, 1) AS pct_famiglie_imprese,
+    ROUND(depositi_banche_mld / NULLIF(depositi_totali_mld, 0) * 100, 1) AS pct_banche
+FROM serie
+WHERE depositi_totali_mld IS NOT NULL
 ORDER BY paese, anno, trimestre

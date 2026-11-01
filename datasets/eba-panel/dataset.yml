@@ -6,6 +6,7 @@ dataset:
   source_id: "eba"
   tags: [banche, eba, panel, banche-singole, corep, finrep]
   category: economia
+  description: "Panel per singola banca europea: CET1, ROE, leverage, totale attivo (EBA, 2012-2025)"
   years: [2025]
   time_coverage:
     start_year: 2012

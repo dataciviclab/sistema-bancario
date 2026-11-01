@@ -4,24 +4,27 @@ schema_version: 1
 dataset:
   name: "ecb_mir"
   source_id: "ecb"
-  tags: [banche, bce, mir, tassi-interesse, prestiti, depositi]
+  tags: [banche, bce, mir, tassi, mutui, depositi, sistema-bancario]
   category: economia
+  description: "Tassi bancari sui nuovi contratti: mutui, prestiti alle imprese, consumo e depositi (BCE, 2003-2026)"
   years: [2026]
   time_coverage:
-    start_year: 2020
+    start_year: 2003
     end_year: 2026
 
 raw:
   output_policy: overwrite
   sources:
+    # Key SDMX dichiarata: solo i tassi in series_catalog.csv, non tutto il
+    # dataflow MIR. La BCE pubblica questa voce solo a frequenza mensile.
     - name: "ecb_mir_raw"
       type: "http_file"
       client:
-        timeout: 120
+        timeout: 300
         retries: 2
         user_agent: "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
       args:
-        url: "https://data-api.ecb.europa.eu/service/data/MIR?format=csvdata&startPeriod=2020"
+        url: "https://data-api.ecb.europa.eu/service/data/MIR/M..B.A2C+A2A+A2B+L21+L22+L23.A+F+I+O.R.A+2.2240+2250.EUR.N?format=csvdata&startPeriod=2003-01"
         filename: "ecb_mir_raw.csv"
       primary: true
 
@@ -35,14 +38,14 @@ clean:
     header: true
   required_columns:
     - paese
-    - voce
-    - scadenza
+    - metrica
     - periodo
     - valore
     - anno
     - trimestre
+    - serie_id
   validate:
-    min_rows: 1000
+    min_rows: 20000
 
 mart:
   tables:
@@ -54,8 +57,8 @@ mart:
   validate:
     table_rules:
       mart_mir_rates:
-        not_null: [paese, anno]
-        min_rows: 100
+        not_null: [paese, anno, trimestre, tasso_mutuo_pct]
+        min_rows: 500
       mart_mir_snapshot:
-        not_null: [paese]
-        min_rows: 10
+        not_null: [paese, tasso_mutuo_pct]
+        min_rows: 20

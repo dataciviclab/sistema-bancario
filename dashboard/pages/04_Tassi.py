@@ -5,7 +5,7 @@ import streamlit as st
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
-from sources import load_tassi_all, load_tassi_snapshot, load_tassi_granular
+from sources import load_tassi_all, load_tassi_snapshot
 
 st.title("📈 Tassi di Interesse Bancari")
 
@@ -13,7 +13,6 @@ EXCLUDE = ["U2", "GB", "U5"]
 
 df_rates = load_tassi_all()
 df_snap = load_tassi_snapshot()
-df_gran = load_tassi_granular()
 
 if df_rates.empty:
     st.warning("Nessun dato disponibile.")
@@ -76,91 +75,35 @@ if not df_snap.empty:
         st.plotly_chart(fig3, width="stretch")
 
 # ============================================================
-# DETTAGLIO: Tassi per scadenza (dati granulari MIR)
+# DETTAGLIO: Mutui per tipo di tasso
 # ============================================================
-st.subheader(f"Dettaglio Tassi — {country}")
+st.subheader(f"Mutui per tipo di tasso — {country}")
 
-if not df_gran.empty:
-    # Filtra: solo tassi (R), new business (N), paese selezionato
-    gr = df_gran[
-        (df_gran["paese"] == country) &
-        (df_gran["tipo_dato"] == "R") &
-        (df_gran["copertura_attivita"] == "N")
-    ].copy()
+if not df_c.empty:
+    df_q = df_c[df_c["trimestre"].notna()].copy()
+    if not df_q.empty:
+        figm = go.Figure()
+        if "tasso_mutuo_variabile_pct" in df_q.columns:
+            figm.add_trace(go.Scatter(x=df_q["periodo_label"], y=df_q["tasso_mutuo_variabile_pct"], name="Variabile (fino a 1 anno)", line=dict(color="#6366f1", width=2)))
+        if "tasso_mutuo_fisso_1_5a_pct" in df_q.columns:
+            figm.add_trace(go.Scatter(x=df_q["periodo_label"], y=df_q["tasso_mutuo_fisso_1_5a_pct"], name="Fisso 1-5 anni", line=dict(color="#a78bfa", width=2)))
+        if "tasso_mutuo_fisso_5_10a_pct" in df_q.columns:
+            figm.add_trace(go.Scatter(x=df_q["periodo_label"], y=df_q["tasso_mutuo_fisso_5_10a_pct"], name="Fisso 5-10 anni", line=dict(color="#c4b5fd", width=2)))
+        figm.update_layout(yaxis_title="Tasso (%)", height=350, margin={"t": 30})
+        st.plotly_chart(figm, width="stretch")
+        st.caption("Serie MIR dichiarate in datasets/ecb-mir/series_catalog.csv: nuovi contratti, tutte le classi di importo.")
 
-    if not gr.empty:
-        # === MUTUI per scadenza ===
-        st.markdown("**Mutui first-home: tasso per durata del tasso fisso**")
+# ============================================================
+# DETTAGLIO: Quanto costa il credito alle piccole imprese
+# ============================================================
+st.subheader(f"Imprese: piccolo vs medio-grande — {country}")
 
-        mutui = gr[gr["voce"] == "A2C"].copy()
-        if not mutui.empty:
-            # Aggrega a trimestre (media dei 3 mesi)
-            mutui_q = mutui.groupby(["anno", "trimestre", "scadenza"]).agg({"valore": "mean"}).reset_index()
-            scadenze_mutui = {
-                "F": "Variabile (fino a 1 anno)",
-                "I": "Fisso 1-5 anni",
-                "K": "Fisso 5-10 anni",
-                "O": "Fisso oltre 10 anni",
-            }
-            fig_m = go.Figure()
-            colors_m = ["#6366f1", "#a78bfa", "#818cf8", "#c4b5fd"]
-            for (sc, label), color in zip(scadenze_mutui.items(), colors_m):
-                d = mutui_q[mutui_q["scadenza"] == sc].sort_values(["anno", "trimestre"])
-                if not d.empty:
-                    d["periodo_label"] = d["anno"].astype(str) + " " + d["trimestre"]
-                    fig_m.add_trace(go.Scatter(
-                        x=d["periodo_label"], y=d["valore"],
-                        name=label, line=dict(color=color, width=2)))
-            fig_m.update_layout(yaxis_title="Tasso (%)", height=350, margin={"t": 30})
-            st.plotly_chart(fig_m, width="stretch")
-            st.caption("Il tasso fisso più lungo è quasi sempre il più caro — le banche chiedono un premio per bloccare il tasso a lungo.")
-
-        # === IMPRESE per scadenza ===
-        st.markdown("**Prestiti imprese: tasso per durata del tasso**")
-
-        imp = gr[gr["voce"] == "A2A"].copy()
-        if not imp.empty:
-            imp_q = imp.groupby(["anno", "trimestre", "scadenza"]).agg({"valore": "mean"}).reset_index()
-            scadenze_imp = {
-                "D": "Fino a 1 anno",
-                "I": "1-5 anni",
-                "K": "5-10 anni",
-                "O": "Oltre 10 anni",
-            }
-            fig_i = go.Figure()
-            colors_i = ["#e74c3c", "#f87171", "#fca5a5", "#fecaca"]
-            for (sc, label), color in zip(scadenze_imp.items(), colors_i):
-                d = imp_q[imp_q["scadenza"] == sc].sort_values(["anno", "trimestre"])
-                if not d.empty:
-                    d["periodo_label"] = d["anno"].astype(str) + " " + d["trimestre"]
-                    fig_i.add_trace(go.Scatter(
-                        x=d["periodo_label"], y=d["valore"],
-                        name=label, line=dict(color=color, width=2)))
-            fig_i.update_layout(yaxis_title="Tasso (%)", height=350, margin={"t": 30})
-            st.plotly_chart(fig_i, width="stretch")
-            st.caption("Per le imprese il costo cresce con la durata del tasso — il rischio duration si riflette nel prezzo.")
-
-        # === DEPOSITI per scadenza ===
-        st.markdown("**Depositi a scadenza: tasso per durata del vincolo**")
-
-        dep = gr[gr["voce"] == "L22"].copy()
-        if not dep.empty:
-            dep_q = dep.groupby(["anno", "trimestre", "scadenza"]).agg({"valore": "mean"}).reset_index()
-            scadenze_dep = {
-                "F": "Fino a 1 anno",
-                "H": "1-2 anni",
-                "K": "2-3 anni",
-                "L": "Oltre 3 anni",
-            }
-            fig_d = go.Figure()
-            colors_d = ["#22c55e", "#4ade80", "#86efac", "#bbf7d0"]
-            for (sc, label), color in zip(scadenze_dep.items(), colors_d):
-                d = dep_q[dep_q["scadenza"] == sc].sort_values(["anno", "trimestre"])
-                if not d.empty:
-                    d["periodo_label"] = d["anno"].astype(str) + " " + d["trimestre"]
-                    fig_d.add_trace(go.Scatter(
-                        x=d["periodo_label"], y=d["valore"],
-                        name=label, line=dict(color=color, width=2)))
-            fig_d.update_layout(yaxis_title="Tasso (%)", height=350, margin={"t": 30})
-            st.plotly_chart(fig_d, width="stretch")
-            st.caption("I vincoli più lunghi rendono di più — la liquidità ha un prezzo.")
+if not df_c.empty:
+    df_q = df_c[df_c["trimestre"].notna()].copy()
+    if not df_q.empty and "tasso_imprese_piccole_pct" in df_q.columns:
+        figp = go.Figure()
+        figp.add_trace(go.Scatter(x=df_q["periodo_label"], y=df_q["tasso_imprese_pct"], name="Tutti gli importi", line=dict(color="#e74c3c", width=2)))
+        figp.add_trace(go.Scatter(x=df_q["periodo_label"], y=df_q["tasso_imprese_piccole_pct"], name="Fino a 0,25 mln", line=dict(color="#f59e0b", width=2, dash="dash")))
+        figp.update_layout(yaxis_title="Tasso (%)", height=350, margin={"t": 30})
+        st.plotly_chart(figp, width="stretch")
+        st.caption("Le imprese piu' piccole pagano un premio: e' il costo del credito che non vedi nei titoli.")

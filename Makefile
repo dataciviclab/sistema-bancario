@@ -1,6 +1,8 @@
 # DataCivicLab — Sistema Bancario
 TOOLKIT = toolkit
-PREFIX = sistema_bancario
+# Prefix GCS del repo: deve corrispondere al path reale del bucket
+# (gs://dataciviclab-clean/sistema-bancario/...), non allo slug con underscore.
+PREFIX = sistema-bancario
 export TOOLKIT_ALLOW_SCRIPT_SOURCE = 1
 
 DATASETS := $(shell find datasets -name dataset.yml 2>/dev/null | sort)

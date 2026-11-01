@@ -1,0 +1,18 @@
+metrica,codice,classe_esposizione,descrizione,unita,moltiplicatore
+cet1,FECPHD0020,,"Common Equity Tier 1 ratio, fully loaded","%",100
+capitale_totale,FECPHD0029,,"Total capital ratio, transitional","%",100
+leverage,FECPHD0025,,"Leverage ratio, transitional","%",100
+roe,FECPHD01000,,"Return on equity","%",100
+return_tier1,FECPHD01001,,"Return on Tier 1 capital","%",100
+attivo_totale,FECPHD00116,,"Total assets","mln EUR",0.001
+esposizione_sovrana,FECPHD00294,sovrana,"Esposizione verso governi centrali e banche centrali, per paese controparte","mln EUR",0.001
+esposizione_imprese,FECPHD00297,imprese,"Esposizione verso societa' non finanziarie, per paese controparte","mln EUR",0.001
+esposizione_retail,FECPHD00307,retail,"Esposizione retail, per paese controparte","mln EUR",0.001
+esposizione_istituzioni,FECPHD00300,istituzioni,"Esposizione verso istituzioni finanziarie, per paese controparte","mln EUR",0.001
+esposizione_equity,FECPHD00299,equity,"Esposizione in azioni e quote, per paese controparte","mln EUR",0.001
+esposizione_altro,FECPHD00304,altro,"Altre esposizioni, per paese controparte","mln EUR",0.001
+rwa_sovrana,FECPHD00376,sovrana,"RWA su governi centrali e banche centrali, per paese controparte","mln EUR",0.001
+rwa_imprese,FECPHD00379,imprese,"RWA su societa' non finanziarie, per paese controparte","mln EUR",0.001
+rwa_retail,FECPHD00389,retail,"RWA retail, per paese controparte","mln EUR",0.001
+rwa_istituzioni,FECPHD00382,istituzioni,"RWA su istituzioni finanziarie, per paese controparte","mln EUR",0.001
+rwa_altro,FECPHD00386,altro,"RWA su altre esposizioni, per paese controparte","mln EUR",0.001

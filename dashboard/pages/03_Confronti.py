@@ -95,4 +95,4 @@ cols_show = ["paese", "roe_pct", "cet1_pct", "npl_ratio_pct", "costo_reddito_pct
 cols_avail = [c for c in cols_show if c in df_bank.columns]
 df_table = df_bank[df_bank["paese"].isin(selected)][cols_avail].copy()
 df_table.columns = [c.replace("_", " ").title() for c in df_table.columns]
-st.dataframe(df_table, use_container_width=True, hide_index=True)
+st.dataframe(df_table, width="stretch", hide_index=True)

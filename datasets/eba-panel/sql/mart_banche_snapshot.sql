@@ -1,16 +1,22 @@
--- mart_banche_snapshot: Ultimo valore disponibile per banca/variabile
+-- mart_banche_snapshot: ultimo valore disponibile per banca e variabile
+--
+-- Le variabili hanno ritardi di pubblicazione diversi (CET1 e ROE non sono
+-- ancora disponibili per il 2025), quindi ogni colonna porta con se' il
+-- periodo a cui si riferisce: `periodo_cet1`, `periodo_roe`, ecc.
 
 WITH ranked AS (
     SELECT
-        banca, nome_banca, paese, nome_paese, tipo_ssm,
-        codice_variabile, valore, periodo,
-        ROW_NUMBER() OVER (PARTITION BY banca, codice_variabile ORDER BY periodo DESC) AS rn
+        banca,
+        nome_banca,
+        paese,
+        nome_paese,
+        tipo_ssm,
+        metrica,
+        valore,
+        periodo,
+        ROW_NUMBER() OVER (PARTITION BY banca, metrica ORDER BY periodo DESC) AS rn
     FROM clean_input
-    WHERE codice_variabile IN (
-        'FECPHD0020', 'FECPHD0029', 'FECPHD0025',
-        'FECPHD01000', 'FECPHD01001', 'FECPHD01005',
-        'FECPHD00116'
-    )
+    WHERE paese_controparte IS NULL
 ),
 
 latest AS (
@@ -18,16 +24,20 @@ latest AS (
 )
 
 SELECT
-    banca, nome_banca, paese, nome_paese, tipo_ssm,
-    MAX(CASE WHEN codice_variabile = 'FECPHD0020' THEN CAST(periodo AS VARCHAR) END) AS periodo_cet1,
-    MAX(CASE WHEN codice_variabile = 'FECPHD01000' THEN CAST(periodo AS VARCHAR) END) AS periodo_roe,
-    MAX(CASE WHEN codice_variabile = 'FECPHD0020' THEN valore END) AS cet1_ratio,
-    MAX(CASE WHEN codice_variabile = 'FECPHD0029' THEN valore END) AS total_capital_ratio,
-    MAX(CASE WHEN codice_variabile = 'FECPHD0025' THEN valore END) AS leverage_ratio,
-    MAX(CASE WHEN codice_variabile = 'FECPHD01000' THEN valore END) AS roe,
-    MAX(CASE WHEN codice_variabile = 'FECPHD01001' THEN valore END) AS return_tier1,
-    MAX(CASE WHEN codice_variabile = 'FECPHD01005' THEN valore END) AS net_interest_margin,
-    MAX(CASE WHEN codice_variabile = 'FECPHD00116' THEN valore END) AS total_assets
+    banca,
+    nome_banca,
+    paese,
+    nome_paese,
+    tipo_ssm,
+    MAX(CASE WHEN metrica = 'attivo_totale' THEN CAST(periodo AS VARCHAR) END) AS periodo_attivo,
+    MAX(CASE WHEN metrica = 'cet1' THEN CAST(periodo AS VARCHAR) END) AS periodo_cet1,
+    MAX(CASE WHEN metrica = 'roe' THEN CAST(periodo AS VARCHAR) END) AS periodo_roe,
+    MAX(CASE WHEN metrica = 'attivo_totale' THEN ROUND(valore, 1) END) AS attivo_totale_mld,
+    MAX(CASE WHEN metrica = 'cet1' THEN ROUND(valore, 2) END) AS cet1_pct,
+    MAX(CASE WHEN metrica = 'capitale_totale' THEN ROUND(valore, 2) END) AS capitale_totale_pct,
+    MAX(CASE WHEN metrica = 'leverage' THEN ROUND(valore, 2) END) AS leverage_pct,
+    MAX(CASE WHEN metrica = 'roe' THEN ROUND(valore, 2) END) AS roe_pct,
+    MAX(CASE WHEN metrica = 'return_tier1' THEN ROUND(valore, 2) END) AS return_tier1_pct
 FROM latest
 GROUP BY banca, nome_banca, paese, nome_paese, tipo_ssm
-ORDER BY total_assets DESC NULLS LAST
+ORDER BY attivo_totale_mld DESC NULLS LAST

@@ -4,13 +4,13 @@ schema_version: 1
 dataset:
   name: "eba_panel"
   source_id: "eba"
-  tags: [banche, eba, panel, banche-singole, corep, finrep]
+  tags: [banche, eba, panel, banche-singole, corep, finrep, esposizioni]
   category: economia
-  description: "Panel per singola banca europea: CET1, ROE, leverage, totale attivo (EBA, 2012-2025)"
   years: [2025]
   time_coverage:
     start_year: 2012
     end_year: 2025
+  description: "Panel per singola banca europea: CET1, ROE, leverage, totale attivo (EBA, 2012-2025)"
 
 raw:
   output_policy: overwrite
@@ -35,11 +35,10 @@ clean:
     - banca
     - paese
     - periodo
-    - codice_variabile
-    - nome_variabile
+    - metrica
     - valore
   validate:
-    min_rows: 10000
+    min_rows: 100000
 
 mart:
   tables:
@@ -47,12 +46,26 @@ mart:
       sql: "sql/mart_banche_kpi.sql"
     - name: "mart_banche_snapshot"
       sql: "sql/mart_banche_snapshot.sql"
-  required_tables: ["mart_banche_kpi", "mart_banche_snapshot"]
+    - name: "mart_esposizioni"
+      sql: "sql/mart_esposizioni.sql"
+    - name: "mart_banche_anagrafica"
+      sql: "sql/mart_banche_anagrafica.sql"
+  required_tables:
+    ["mart_banche_kpi", "mart_banche_snapshot", "mart_esposizioni", "mart_banche_anagrafica"]
   validate:
     table_rules:
+      # Copertura reale: CET1 parte dal 2015H2 e nel 2025 non e' ancora
+      # pubblicato; il totale attivo manca per alcune banche. Le soglie sono
+      # verificate in tests/test_mart_contract.py, non imposte riga per riga.
       mart_banche_kpi:
         not_null: [banca, periodo]
         min_rows: 1000
       mart_banche_snapshot:
-        not_null: [banca]
+        not_null: [banca, paese]
+        min_rows: 50
+      mart_esposizioni:
+        not_null: [banca, paese_controparte, periodo]
+        min_rows: 5000
+      mart_banche_anagrafica:
+        not_null: [banca, paese]
         min_rows: 50

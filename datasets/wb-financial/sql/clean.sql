@@ -1,34 +1,34 @@
--- clean.sql: World Bank WDI Financial Sector
--- CSV ha 4 righe di header. DuckDB le salta con header=true.
--- Anni: colonne `1960` a `2025`
+-- clean.sql: World Bank WDI — indicatori del settore finanziario
+--
+-- Il raw e' gia' in formato lungo (una riga per paese/indicatore/anno), scritto
+-- da preprocess.py che interroga la v2 JSON API solo per i 7 indicatori usati.
+--
+-- Il clean precedente leggeva il bulk WDI_CSV.zip (~190 MB, ~1.400 indicatori)
+-- e faceva UNNEST su 11 anni scritti a mano (2015-2025) mentre il registry
+-- dichiarava 1960-2025: la storia non c'era e il download era 60x piu' grande
+-- del necessario.
+
+WITH raw AS (
+    SELECT * FROM raw_input
+)
 
 SELECT
-    "Country Name" AS paese,
-    "Country Code" AS codice_paese,
-    "Indicator Name" AS indicatore,
-    "Indicator Code" AS codice_indicatore,
+    CAST(paese AS VARCHAR) AS paese,
+    CAST(codice_paese AS VARCHAR) AS codice_paese,
+    CAST(indicatore AS VARCHAR) AS indicatore,
+    CAST(codice_indicatore AS VARCHAR) AS codice_indicatore,
     CAST(anno AS INTEGER) AS anno,
-    CAST(valore AS DOUBLE) AS valore
-FROM (
-    SELECT
-        "Country Name", "Country Code", "Indicator Name", "Indicator Code",
-        UNNEST(['2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025']) AS anno,
-        UNNEST([
-            "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025"
-        ]) AS valore
-    FROM raw_input
-    WHERE "Country Code" IS NOT NULL
-      AND "Indicator Code" IS NOT NULL
-      AND "Country Name" != 'Country Name'
-)
-WHERE valore IS NOT NULL
-  AND codice_indicatore IN (
-      'FB.AST.NPER.ZS',    -- NPL ratio
-      'FS.AST.PRVT.GD.ZS', -- Credito privato/PIL
-      'FB.CBK.BRCH.P5',    -- Filiali bancarie per 100k
-      'FB.ATM.TOTL.P5',    -- ATM per 100k
-      'FB.BNK.CAPA.ZS',    -- Capitale bancario/attivi
-      'FB.AST.IRNR.ZS',    -- Tasso interesse reale
-      'FR.INR.LNDP'        -- Spread prestiti-depositi
-  )
+    CAST(valore AS DOUBLE) AS valore,
+    -- Aggregati World Bank: mondo, aree geografiche, fasce di reddito, unioni.
+    -- Restano nel clean ma i mart li escludono.
+    CAST(codice_paese AS VARCHAR) IN (
+        'WLD', 'EUU', 'EMU', 'ARB', 'CSS', 'CEB', 'EAP', 'EAR', 'EAS', 'ECA', 'ECS', 'SSF',
+        'HIC', 'HPC', 'IBD', 'IBT', 'IDA', 'IDB', 'IDX', 'LAC', 'LCN', 'LDC', 'LIC', 'LMC',
+        'LTE', 'MIC', 'MNA', 'NAC', 'INX', 'OED', 'OSS', 'PRE', 'PST', 'SAS', 'SSA', 'TEA',
+        'TEC', 'TLA', 'TMN', 'TSA', 'TSS', 'UMC', 'FCS', 'AFE', 'AFW', 'LAT', 'MEU', 'SXL'
+    ) AS e_aggregato
+FROM raw
+WHERE codice_indicatore IS NOT NULL
+  AND codice_paese IS NOT NULL
+  AND valore IS NOT NULL
 ORDER BY paese, codice_indicatore, anno

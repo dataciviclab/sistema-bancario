@@ -6,6 +6,7 @@ dataset:
   source_id: "worldbank"
   tags: [banche, world-bank, wdi, npl, credito, filiali, storico]
   category: economia
+  description: "Indicatori storici del settore finanziario: NPL, credito/PIL, filiali e ATM per abitante (World Bank, 1960-2025)"
   years: [2025]
   time_coverage:
     start_year: 1960

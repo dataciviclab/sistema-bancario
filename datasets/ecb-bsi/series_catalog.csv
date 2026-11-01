@@ -1,0 +1,10 @@
+metrica,serie_id,descrizione,unita,moltiplicatore
+attivo_totale,T00|B|Z5|0000|A|1|Z01|N|E,"Attivo totale delle banche (deposit-taking corporations escl. banche centrali), stock","mln EUR",0.001
+prestiti,A20|B|U2|0000|A|1|Z01|N|E,"Prestiti a residenti dell'area euro concessi dalle banche, stock","mln EUR",0.001
+prestiti_famiglie_imprese,A20|A|U2|2000|A|1|Z01|N|E,"Prestiti a famiglie e imprese (settore non finanziario) dell'area euro, stock","mln EUR",0.001
+depositi,L20|B|U2|0000|A|1|Z01|N|E,"Depositi di residenti dell'area euro presso le banche, stock","mln EUR",0.001
+depositi_famiglie_imprese,L20|A|U2|2000|A|1|Z01|N|E,"Depositi di famiglie e imprese (settore non finanziario) dell'area euro, stock","mln EUR",0.001
+depositi_banche,L20|A|U2|1000|A|1|Z01|N|E,"Depositi di altre istituzioni finanziarie monetarie, stock","mln EUR",0.001
+depositi_governo_centrale,L20|B|U2|2110|A|1|Z01|N|E,"Depositi delle amministrazioni centrali, stock","mln EUR",0.001
+obbligazioni,L40|A|Z5|0000|A|1|Z01|N|E,"Titoli di debito emessi dalle banche, stock","mln EUR",0.001
+capitale_riserve,L60|B|Z5|0000|X|1|Z01|N|E,"Capitale e riserve delle banche, stock","mln EUR",0.001

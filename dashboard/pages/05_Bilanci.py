@@ -69,18 +69,16 @@ if not df_c.empty:
         st.plotly_chart(fig2, width="stretch")
 
 # --- Depositi ---
-st.subheader("Composizione Depositi")
+st.subheader("Chi tiene i depositi")
 
 if not df_dep_c.empty:
     df_q = df_dep_c[df_dep_c["trimestre"].notna()].copy()
-    if not df_q.empty and "pct_overnight" in df_q.columns:
+    if not df_q.empty and "pct_famiglie_imprese" in df_q.columns:
         fig3 = go.Figure()
-        fig3.add_trace(go.Scatter(x=df_q["periodo_label"], y=df_q["pct_overnight"], name="Conti correnti", line=dict(color="#6366f1", width=2)))
-        if "pct_scadenza" in df_q.columns:
-            fig3.add_trace(go.Scatter(x=df_q["periodo_label"], y=df_q["pct_scadenza"], name="A scadenza", line=dict(color="#22c55e", width=2)))
-        if "pct_preavviso" in df_q.columns:
-            fig3.add_trace(go.Scatter(x=df_q["periodo_label"], y=df_q["pct_preavviso"], name="Preavviso", line=dict(color="#f59e0b", width=2)))
-        fig3.update_layout(yaxis_title="%", height=300, margin={"t": 30})
+        fig3.add_trace(go.Scatter(x=df_q["periodo_label"], y=df_q["pct_famiglie_imprese"], name="Famiglie e imprese", line=dict(color="#22c55e", width=2)))
+        if "pct_banche" in df_q.columns:
+            fig3.add_trace(go.Scatter(x=df_q["periodo_label"], y=df_q["pct_banche"], name="Altre banche", line=dict(color="#f59e0b", width=2)))
+        fig3.update_layout(yaxis_title="% dei depositi totali", height=300, margin={"t": 30})
         st.plotly_chart(fig3, width="stretch")
 
 # --- Confronto ---

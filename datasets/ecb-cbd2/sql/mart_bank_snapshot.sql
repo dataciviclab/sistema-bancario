@@ -1,31 +1,47 @@
--- mart_bank_snapshot: Ultimo trimestre per paese
+-- mart_bank_snapshot: ultimo trimestre disponibile per paese
+--
+-- Stesse serie dichiarate di mart_bank_kpi, stesso perimetro: un confronto
+-- cross-country non deve mostrare numeri diversi dalla serie trimestrale.
 
-WITH pivoted AS (
+WITH serie AS (
     SELECT
-        paese, anno, trimestre,
-        ROUND(AVG(CASE WHEN indicatore = 'I2003' THEN valore END), 2) AS roe_pct,
-        ROUND(AVG(CASE WHEN indicatore = 'I2004' THEN valore END), 2) AS roa_pct,
-        ROUND(AVG(CASE WHEN indicatore = 'I2100' THEN valore END), 2) AS costo_reddito_pct,
-        ROUND(AVG(CASE WHEN indicatore = 'I2120' THEN valore END), 2) AS margine_interesse_pct,
-        ROUND(AVG(CASE WHEN indicatore = 'I4008' THEN valore END), 2) AS cet1_pct,
-        ROUND(AVG(CASE WHEN indicatore = 'I4002' THEN valore END), 2) AS tier1_pct,
-        ROUND(AVG(CASE WHEN indicatore = 'I4007' THEN valore END), 2) AS capitale_totale_pct,
-        ROUND(AVG(CASE WHEN indicatore = 'I3632' THEN valore END), 2) AS npl_ratio_pct,
-        ROUND(AVG(CASE WHEN indicatore = 'I3631' THEN valore END), 2) AS copertura_npl_pct,
-        ROUND(AVG(CASE WHEN indicatore = 'I3017' THEN valore END), 2) AS lcr_pct,
-        ROUND(AVG(CASE WHEN indicatore = 'I3006' THEN valore END), 2) AS prestiti_deposits_pct,
-        ROUND(AVG(CASE WHEN indicatore = 'I3160' THEN valore END), 2) AS prestiti_attivo_pct,
-        ROW_NUMBER() OVER (PARTITION BY paese ORDER BY anno DESC, trimestre DESC) AS rn
+        paese,
+        anno,
+        trimestre,
+        MAX(CASE WHEN metrica = 'roe' THEN valore END) AS roe_pct,
+        MAX(CASE WHEN metrica = 'roa' THEN valore END) AS roa_pct,
+        MAX(CASE WHEN metrica = 'costo_reddito' THEN valore END) AS costo_reddito_pct,
+        MAX(CASE WHEN metrica = 'cet1' THEN valore END) AS cet1_pct,
+        MAX(CASE WHEN metrica = 'npl' THEN valore END) AS npl_ratio_pct,
+        MAX(CASE WHEN metrica = 'copertura_npl' THEN valore END) AS copertura_npl_pct,
+        MAX(CASE WHEN metrica = 'lcr' THEN valore END) AS lcr_pct,
+        MAX(CASE WHEN metrica = 'prestiti_depositi' THEN valore END) AS prestiti_deposits_pct
     FROM clean_input
     WHERE trimestre IS NOT NULL
+      AND LENGTH(paese) = 2
+      AND paese NOT IN ('U2', 'U5', '4F', 'B0')
     GROUP BY paese, anno, trimestre
+),
+
+ultimo AS (
+    SELECT *,
+           ROW_NUMBER() OVER (PARTITION BY paese ORDER BY anno DESC, trimestre DESC) AS rn
+    FROM serie
+    WHERE roe_pct IS NOT NULL
 )
+
 SELECT
-    paese, anno, trimestre,
-    roe_pct, roa_pct, costo_reddito_pct, margine_interesse_pct,
-    cet1_pct, tier1_pct, capitale_totale_pct,
-    npl_ratio_pct, copertura_npl_pct,
-    lcr_pct, prestiti_deposits_pct, prestiti_attivo_pct
-FROM pivoted
+    paese,
+    anno,
+    trimestre,
+    ROUND(roe_pct, 2) AS roe_pct,
+    ROUND(roa_pct, 2) AS roa_pct,
+    ROUND(costo_reddito_pct, 2) AS costo_reddito_pct,
+    ROUND(cet1_pct, 2) AS cet1_pct,
+    ROUND(npl_ratio_pct, 2) AS npl_ratio_pct,
+    ROUND(copertura_npl_pct, 2) AS copertura_npl_pct,
+    ROUND(lcr_pct, 2) AS lcr_pct,
+    ROUND(prestiti_deposits_pct, 2) AS prestiti_deposits_pct
+FROM ultimo
 WHERE rn = 1
 ORDER BY paese

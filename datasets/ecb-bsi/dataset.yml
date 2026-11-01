@@ -4,16 +4,21 @@ schema_version: 1
 dataset:
   name: "ecb_bsi"
   source_id: "ecb"
-  tags: [banche, bce, bsi, bilanci-mfi, depositi, prestiti, moneta]
+  tags: [banche, bce, bsi, bilanci, sistema-bancario, europa]
   category: economia
+  description: "Bilanci delle banche per paese: attivo, prestiti, depositi per detentore, capitale e riserve (BCE, 2003-2026)"
   years: [2026]
   time_coverage:
-    start_year: 2020
+    start_year: 2003
     end_year: 2026
 
 raw:
   output_policy: overwrite
   sources:
+    # Pull mirato: la key SDMX seleziona solo le serie dichiarate in
+    # series_catalog.csv (~17 MB) invece del dataflow completo (~1,9 GB).
+    # La key e' un cross-product: l'API restituisce solo le combinazioni
+    # esistenti, il clean tiene solo quelle del catalogo.
     - name: "ecb_bsi_raw"
       type: "http_file"
       client:
@@ -21,7 +26,7 @@ raw:
         retries: 2
         user_agent: "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
       args:
-        url: "https://data-api.ecb.europa.eu/service/data/BSI?format=csvdata&startPeriod=2020"
+        url: "https://data-api.ecb.europa.eu/service/data/BSI/Q..N.A+B.T00+A20+L20+L40+L60.A+X.1.Z5+U2+U6.0000+1000+2000+2110+2300.Z01.E?format=csvdata&startPeriod=2003-01"
         filename: "ecb_bsi_raw.csv"
       primary: true
 
@@ -35,13 +40,14 @@ clean:
     header: true
   required_columns:
     - paese
-    - voce
+    - metrica
     - periodo
     - valore
     - anno
     - trimestre
+    - serie_id
   validate:
-    min_rows: 1000
+    min_rows: 10000
 
 mart:
   tables:
@@ -55,11 +61,11 @@ mart:
   validate:
     table_rules:
       mart_bsi_balance:
-        not_null: [paese, anno]
-        min_rows: 100
+        not_null: [paese, anno, trimestre, attivo_totale_mld, prestiti_mld, depositi_mld]
+        min_rows: 500
       mart_bsi_deposits:
-        not_null: [paese, anno]
-        min_rows: 100
+        not_null: [paese, anno, trimestre, depositi_totali_mld]
+        min_rows: 500
       mart_bsi_snapshot:
-        not_null: [paese]
-        min_rows: 10
+        not_null: [paese, attivo_totale_mld]
+        min_rows: 20

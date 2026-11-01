@@ -61,13 +61,31 @@
           "description": ""
         },
         {
+          "name": "margine_interesse_pct",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
           "name": "cet1_pct",
           "type": "DOUBLE",
           "role": "metric",
           "description": ""
         },
         {
+          "name": "tier1_pct",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
           "name": "npl_ratio_pct",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "copertura_npl_pct",
           "type": "DOUBLE",
           "role": "metric",
           "description": ""
@@ -92,18 +110,6 @@
         },
         {
           "name": "deposits_mld",
-          "type": "DOUBLE",
-          "role": "metric",
-          "description": ""
-        },
-        {
-          "name": "obbligazioni_mld",
-          "type": "DOUBLE",
-          "role": "metric",
-          "description": ""
-        },
-        {
-          "name": "capitale_mld",
           "type": "DOUBLE",
           "role": "metric",
           "description": ""
@@ -140,7 +146,7 @@
     {
       "slug": "eba_panel",
       "name": "Eba Panel",
-      "description": "",
+      "description": "Panel per singola banca europea: CET1, ROE, leverage, totale attivo (EBA, 2012-2025)",
       "source": "",
       "source_id": "eba",
       "period": {
@@ -234,19 +240,20 @@
     {
       "slug": "ecb_bls",
       "name": "Ecb Bls",
-      "description": "",
+      "description": "Bank Lending Survey: condizioni e domanda di credito per imprese e famiglie, indici di diffusione (BCE, 2003-2026)",
       "source": "",
       "source_id": "ecb",
       "period": {
-        "start": 2007,
+        "start": 2003,
         "end": 2026
       },
       "tags": [
         "banche",
         "bce",
         "bls",
-        "credit-standards",
-        "domanda-credito"
+        "credito",
+        "survey",
+        "sistema-bancario"
       ],
       "category": "economia",
       "columns": [
@@ -258,7 +265,14 @@
           "semantic_type": "country_code"
         },
         {
-          "name": "voce",
+          "name": "anno",
+          "type": "INTEGER",
+          "role": "dimension",
+          "description": "",
+          "semantic_type": "year"
+        },
+        {
+          "name": "trimestre",
           "type": "VARCHAR",
           "role": "dimension",
           "description": ""
@@ -271,26 +285,43 @@
           "semantic_type": "month"
         },
         {
+          "name": "metrica",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "descrizione",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "unita",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
           "name": "valore",
           "type": "DOUBLE",
           "role": "metric",
           "description": ""
         },
         {
-          "name": "num_banche",
+          "name": "serie_id",
           "type": "VARCHAR",
           "role": "dimension",
           "description": ""
         },
         {
-          "name": "anno",
-          "type": "INTEGER",
+          "name": "chiave",
+          "type": "VARCHAR",
           "role": "dimension",
-          "description": "",
-          "semantic_type": "year"
+          "description": ""
         },
         {
-          "name": "trimestre",
+          "name": "frequenza",
           "type": "VARCHAR",
           "role": "dimension",
           "description": ""
@@ -310,21 +341,20 @@
     {
       "slug": "ecb_bsi",
       "name": "Ecb Bsi",
-      "description": "",
+      "description": "Bilanci delle banche per paese: attivo, prestiti, depositi per detentore, capitale e riserve (BCE, 2003-2026)",
       "source": "",
       "source_id": "ecb",
       "period": {
-        "start": 2020,
+        "start": 2003,
         "end": 2026
       },
       "tags": [
         "banche",
         "bce",
         "bsi",
-        "bilanci-mfi",
-        "depositi",
-        "prestiti",
-        "moneta"
+        "bilanci",
+        "sistema-bancario",
+        "europa"
       ],
       "category": "economia",
       "columns": [
@@ -336,7 +366,14 @@
           "semantic_type": "country_code"
         },
         {
-          "name": "voce",
+          "name": "anno",
+          "type": "INTEGER",
+          "role": "dimension",
+          "description": "",
+          "semantic_type": "year"
+        },
+        {
+          "name": "trimestre",
           "type": "VARCHAR",
           "role": "dimension",
           "description": ""
@@ -349,25 +386,13 @@
           "semantic_type": "month"
         },
         {
-          "name": "valore",
-          "type": "DOUBLE",
-          "role": "metric",
-          "description": ""
-        },
-        {
-          "name": "frequenza",
+          "name": "metrica",
           "type": "VARCHAR",
           "role": "dimension",
           "description": ""
         },
         {
-          "name": "settore",
-          "type": "VARCHAR",
-          "role": "dimension",
-          "description": ""
-        },
-        {
-          "name": "scadenza",
+          "name": "descrizione",
           "type": "VARCHAR",
           "role": "dimension",
           "description": ""
@@ -379,14 +404,25 @@
           "description": ""
         },
         {
-          "name": "anno",
-          "type": "INTEGER",
-          "role": "dimension",
-          "description": "",
-          "semantic_type": "year"
+          "name": "valore",
+          "type": "DOUBLE",
+          "role": "metric",
+          "description": ""
         },
         {
-          "name": "trimestre",
+          "name": "serie_id",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "chiave",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "frequenza",
           "type": "VARCHAR",
           "role": "dimension",
           "description": ""
@@ -407,7 +443,7 @@
     {
       "slug": "ecb_cbd2",
       "name": "Ecb Cbd2",
-      "description": "",
+      "description": "KPI del sistema bancario per paese: redditività, capitale, NPL per settore controparte, liquidità (BCE, 2015-2026)",
       "source": "",
       "source_id": "ecb",
       "period": {
@@ -419,7 +455,8 @@
         "bce",
         "cbd2",
         "sistema-bancario",
-        "europa"
+        "europa",
+        "kpi"
       ],
       "category": "economia",
       "columns": [
@@ -431,11 +468,17 @@
           "semantic_type": "country_code"
         },
         {
-          "name": "indicatore",
-          "type": "VARCHAR",
+          "name": "anno",
+          "type": "INTEGER",
           "role": "dimension",
           "description": "",
-          "semantic_type": "indicatore_code"
+          "semantic_type": "year"
+        },
+        {
+          "name": "trimestre",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
         },
         {
           "name": "periodo",
@@ -445,50 +488,43 @@
           "semantic_type": "month"
         },
         {
+          "name": "metrica",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "descrizione",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "unita",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
           "name": "valore",
           "type": "DOUBLE",
           "role": "metric",
           "description": ""
         },
         {
+          "name": "serie_id",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "chiave",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
           "name": "frequenza",
-          "type": "VARCHAR",
-          "role": "dimension",
-          "description": ""
-        },
-        {
-          "name": "settore",
-          "type": "BIGINT",
-          "role": "metric",
-          "description": ""
-        },
-        {
-          "name": "framework",
-          "type": "VARCHAR",
-          "role": "dimension",
-          "description": ""
-        },
-        {
-          "name": "portfolio",
-          "type": "VARCHAR",
-          "role": "dimension",
-          "description": ""
-        },
-        {
-          "name": "tipo_esposizione",
-          "type": "VARCHAR",
-          "role": "dimension",
-          "description": ""
-        },
-        {
-          "name": "anno",
-          "type": "INTEGER",
-          "role": "dimension",
-          "description": "",
-          "semantic_type": "year"
-        },
-        {
-          "name": "trimestre",
           "type": "VARCHAR",
           "role": "dimension",
           "description": ""
@@ -508,20 +544,21 @@
     {
       "slug": "ecb_mir",
       "name": "Ecb Mir",
-      "description": "",
+      "description": "Tassi bancari sui nuovi contratti: mutui, prestiti alle imprese, consumo e depositi (BCE, 2003-2026)",
       "source": "",
       "source_id": "ecb",
       "period": {
-        "start": 2020,
+        "start": 2003,
         "end": 2026
       },
       "tags": [
         "banche",
         "bce",
         "mir",
-        "tassi-interesse",
-        "prestiti",
-        "depositi"
+        "tassi",
+        "mutui",
+        "depositi",
+        "sistema-bancario"
       ],
       "category": "economia",
       "columns": [
@@ -533,13 +570,14 @@
           "semantic_type": "country_code"
         },
         {
-          "name": "voce",
-          "type": "VARCHAR",
+          "name": "anno",
+          "type": "INTEGER",
           "role": "dimension",
-          "description": ""
+          "description": "",
+          "semantic_type": "year"
         },
         {
-          "name": "scadenza",
+          "name": "trimestre",
           "type": "VARCHAR",
           "role": "dimension",
           "description": ""
@@ -552,38 +590,43 @@
           "semantic_type": "month"
         },
         {
+          "name": "metrica",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "descrizione",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "unita",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
           "name": "valore",
           "type": "DOUBLE",
           "role": "metric",
           "description": ""
         },
         {
-          "name": "tipo_dato",
+          "name": "serie_id",
           "type": "VARCHAR",
           "role": "dimension",
           "description": ""
         },
         {
-          "name": "copertura_attivita",
+          "name": "chiave",
           "type": "VARCHAR",
           "role": "dimension",
           "description": ""
         },
         {
-          "name": "settore",
-          "type": "VARCHAR",
-          "role": "dimension",
-          "description": ""
-        },
-        {
-          "name": "anno",
-          "type": "INTEGER",
-          "role": "dimension",
-          "description": "",
-          "semantic_type": "year"
-        },
-        {
-          "name": "trimestre",
+          "name": "frequenza",
           "type": "VARCHAR",
           "role": "dimension",
           "description": ""
@@ -603,7 +646,7 @@
     {
       "slug": "wb_financial",
       "name": "Wb Financial",
-      "description": "",
+      "description": "Indicatori storici del settore finanziario: NPL, credito/PIL, filiali e ATM per abitante (World Bank, 1960-2025)",
       "source": "",
       "source_id": "worldbank",
       "period": {
@@ -659,6 +702,12 @@
           "name": "valore",
           "type": "DOUBLE",
           "role": "metric",
+          "description": ""
+        },
+        {
+          "name": "e_aggregato",
+          "type": "BOOLEAN",
+          "role": "dimension",
           "description": ""
         }
       ],
@@ -825,7 +874,7 @@
       "detail": "anno 2026 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20261101T121705Z_8e1918cb",
+        "run_id": "20261101T223106Z_aa0c96c6",
         "year": 2026,
         "status": "SUCCESS",
         "quality_score": {
@@ -834,17 +883,17 @@
           "mart": 100
         },
         "output_rows": {
-          "clean": 1325,
-          "mart": 1325
+          "clean": 1235,
+          "mart": 1235
         },
         "output_bytes": {
-          "raw": 47158,
-          "clean": 37701,
-          "mart": 34298
+          "raw": 55281,
+          "clean": 47321,
+          "mart": 36820
         },
-        "started_at": "2026-11-01T12:17:05.813254+00:00",
-        "finished_at": "2026-11-01T12:17:05.959949+00:00",
-        "duration_seconds": 0.147
+        "started_at": "2026-11-01T22:31:06.464187+00:00",
+        "finished_at": "2026-11-01T22:31:06.580094+00:00",
+        "duration_seconds": 0.116
       }
     },
     {
@@ -855,7 +904,7 @@
       "detail": "anno 2025 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20261101T121055Z_f0217f24",
+        "run_id": "20261101T223025Z_85aeb00d",
         "year": 2025,
         "status": "SUCCESS",
         "quality_score": {
@@ -870,11 +919,11 @@
         "output_bytes": {
           "raw": 155561608,
           "clean": 2379317,
-          "mart": 208270
+          "mart": 208277
         },
-        "started_at": "2026-11-01T12:10:55.370496+00:00",
-        "finished_at": "2026-11-01T12:11:00.433363+00:00",
-        "duration_seconds": 5.063
+        "started_at": "2026-11-01T22:30:25.682481+00:00",
+        "finished_at": "2026-11-01T22:30:29.775989+00:00",
+        "duration_seconds": 4.094
       }
     },
     {
@@ -885,7 +934,7 @@
       "detail": "anno 2026 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20261101T121102Z_1dcc1a7a",
+        "run_id": "20261101T223033Z_29aeb241",
         "year": 2026,
         "status": "SUCCESS",
         "quality_score": {
@@ -894,18 +943,18 @@
           "mart": 100
         },
         "output_rows": {
-          "raw": 1240404,
-          "clean": 845312,
-          "mart": 1749
+          "raw": 33718,
+          "clean": 15634,
+          "mart": 1500
         },
         "output_bytes": {
-          "raw": 546481085,
-          "clean": 1681055,
-          "mart": 36999
+          "raw": 11476950,
+          "clean": 20376,
+          "mart": 24713
         },
-        "started_at": "2026-11-01T12:11:02.956352+00:00",
-        "finished_at": "2026-11-01T12:11:25.057203+00:00",
-        "duration_seconds": 22.101
+        "started_at": "2026-11-01T22:30:33.574783+00:00",
+        "finished_at": "2026-11-01T22:30:36.565430+00:00",
+        "duration_seconds": 2.991
       }
     },
     {
@@ -916,7 +965,7 @@
       "detail": "anno 2026 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20261101T121236Z_1a6bf160",
+        "run_id": "20261101T223040Z_735a9658",
         "year": 2026,
         "status": "SUCCESS",
         "quality_score": {
@@ -925,18 +974,18 @@
           "mart": 100
         },
         "output_rows": {
-          "raw": 3585151,
-          "clean": 1469110,
-          "mart": 1665
+          "raw": 32497,
+          "clean": 16783,
+          "mart": 2837
         },
         "output_bytes": {
-          "raw": 2005504568,
-          "clean": 7327092,
-          "mart": 31175
+          "raw": 17279110,
+          "clean": 93355,
+          "mart": 60880
         },
-        "started_at": "2026-11-01T12:12:36.887177+00:00",
-        "finished_at": "2026-11-01T12:14:32.216287+00:00",
-        "duration_seconds": 115.329
+        "started_at": "2026-11-01T22:30:40.528446+00:00",
+        "finished_at": "2026-11-01T22:30:43.420726+00:00",
+        "duration_seconds": 2.892
       }
     },
     {
@@ -947,7 +996,7 @@
       "detail": "anno 2026 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20261101T121528Z_8b3aa7be",
+        "run_id": "20261101T223049Z_c9ec48c5",
         "year": 2026,
         "status": "SUCCESS",
         "quality_score": {
@@ -956,18 +1005,18 @@
           "mart": 100
         },
         "output_rows": {
-          "raw": 1529548,
-          "clean": 1416436,
-          "mart": 1355
+          "raw": 16873,
+          "clean": 19212,
+          "mart": 1263
         },
         "output_bytes": {
-          "raw": 1192472278,
-          "clean": 6712125,
-          "mart": 51301
+          "raw": 14478372,
+          "clean": 85270,
+          "mart": 58466
         },
-        "started_at": "2026-11-01T12:15:28.242581+00:00",
-        "finished_at": "2026-11-01T12:16:14.759942+00:00",
-        "duration_seconds": 46.517
+        "started_at": "2026-11-01T22:30:49.377059+00:00",
+        "finished_at": "2026-11-01T22:30:54.676000+00:00",
+        "duration_seconds": 5.299
       }
     },
     {
@@ -978,7 +1027,7 @@
       "detail": "anno 2026 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20261101T121624Z_0bdcf2b3",
+        "run_id": "20261101T223057Z_083d8b2a",
         "year": 2026,
         "status": "SUCCESS",
         "quality_score": {
@@ -987,18 +1036,18 @@
           "mart": 100
         },
         "output_rows": {
-          "raw": 595386,
-          "clean": 540539,
-          "mart": 784
+          "raw": 113903,
+          "clean": 51363,
+          "mart": 1817
         },
         "output_bytes": {
-          "raw": 379421285,
-          "clean": 1350456,
-          "mart": 25393
+          "raw": 69617127,
+          "clean": 90098,
+          "mart": 51333
         },
-        "started_at": "2026-11-01T12:16:24.688861+00:00",
-        "finished_at": "2026-11-01T12:16:40.829755+00:00",
-        "duration_seconds": 16.141
+        "started_at": "2026-11-01T22:30:57.594565+00:00",
+        "finished_at": "2026-11-01T22:31:02.934380+00:00",
+        "duration_seconds": 5.34
       }
     },
     {
@@ -1009,27 +1058,27 @@
       "detail": "anno 2025 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20261101T121641Z_1709d05b",
+        "run_id": "20261101T223103Z_f6cff9a8",
         "year": 2025,
         "status": "SUCCESS",
         "quality_score": {
           "raw": 100,
-          "clean": 95,
+          "clean": 100,
           "mart": 100
         },
         "output_rows": {
-          "raw": 398469,
-          "clean": 11016,
-          "mart": 2737
+          "raw": 33722,
+          "clean": 33293,
+          "mart": 9002
         },
         "output_bytes": {
-          "raw": 198924434,
-          "clean": 88082,
-          "mart": 94690
+          "raw": 3372194,
+          "clean": 250716,
+          "mart": 230033
         },
-        "started_at": "2026-11-01T12:16:41.124465+00:00",
-        "finished_at": "2026-11-01T12:17:05.508655+00:00",
-        "duration_seconds": 24.384
+        "started_at": "2026-11-01T22:31:03.269711+00:00",
+        "finished_at": "2026-11-01T22:31:06.102320+00:00",
+        "duration_seconds": 2.833
       }
     }
   ],
@@ -1040,12 +1089,6 @@
         "entity": "Indicatore",
         "label": "Indicatore",
         "datasets": [
-          {
-            "slug": "ecb_cbd2",
-            "name": "Ecb Cbd2",
-            "column": "indicatore",
-            "semantic_type": "indicatore_code"
-          },
           {
             "slug": "wb_financial",
             "name": "Wb Financial",
@@ -1060,7 +1103,7 @@
           }
         ],
         "types": {
-          "indicatore_code": 3
+          "indicatore_code": 2
         }
       },
       "Nazione": {
@@ -1133,18 +1176,12 @@
           {
             "slug": "ecb_bls",
             "name": "Ecb Bls",
-            "column": "periodo",
-            "semantic_type": "month"
+            "column": "anno",
+            "semantic_type": "year"
           },
           {
             "slug": "ecb_bls",
             "name": "Ecb Bls",
-            "column": "anno",
-            "semantic_type": "year"
-          },
-          {
-            "slug": "ecb_bsi",
-            "name": "Ecb Bsi",
             "column": "periodo",
             "semantic_type": "month"
           },
@@ -1155,8 +1192,8 @@
             "semantic_type": "year"
           },
           {
-            "slug": "ecb_cbd2",
-            "name": "Ecb Cbd2",
+            "slug": "ecb_bsi",
+            "name": "Ecb Bsi",
             "column": "periodo",
             "semantic_type": "month"
           },
@@ -1167,8 +1204,8 @@
             "semantic_type": "year"
           },
           {
-            "slug": "ecb_mir",
-            "name": "Ecb Mir",
+            "slug": "ecb_cbd2",
+            "name": "Ecb Cbd2",
             "column": "periodo",
             "semantic_type": "month"
           },
@@ -1177,6 +1214,12 @@
             "name": "Ecb Mir",
             "column": "anno",
             "semantic_type": "year"
+          },
+          {
+            "slug": "ecb_mir",
+            "name": "Ecb Mir",
+            "column": "periodo",
+            "semantic_type": "month"
           },
           {
             "slug": "wb_financial",
@@ -1192,19 +1235,6 @@
       }
     },
     "bridges": [
-      {
-        "from": {
-          "entity": "Indicatore",
-          "dataset": "ecb_cbd2",
-          "via": "indicatore_code"
-        },
-        "to": {
-          "entity": "Progetto",
-          "bridge": "pnrr_indicatori_target",
-          "on": "cup",
-          "semantic_type": "cup_code"
-        }
-      },
       {
         "from": {
           "entity": "Indicatore",

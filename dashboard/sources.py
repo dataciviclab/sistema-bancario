@@ -174,3 +174,22 @@ def load_banche_kpi() -> pd.DataFrame:
 @st.cache_data(ttl=3600, show_spinner=False)
 def load_banche_snapshot() -> pd.DataFrame:
     return _mart("eba_panel", "mart_banche_snapshot", _latest_year("eba_panel"))
+
+
+@st.cache_data(ttl=3600, show_spinner=False)
+def load_esposizioni() -> pd.DataFrame:
+    """Esposizioni per banca x paese controparte (EBA, tutte le banche/periodi)."""
+    frames = []
+    for y in _years("eba_panel"):
+        try:
+            df = _mart("eba_panel", "mart_esposizioni", y)
+            if not df.empty:
+                frames.append(df)
+        except Exception:
+            pass
+    return pd.concat(frames, ignore_index=True) if frames else pd.DataFrame()
+
+
+@st.cache_data(ttl=3600, show_spinner=False)
+def load_banche_anagrafica() -> pd.DataFrame:
+    return _mart("eba_panel", "mart_banche_anagrafica", _latest_year("eba_panel"))

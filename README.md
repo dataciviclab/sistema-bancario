@@ -27,7 +27,7 @@ Sistema di intelligence sul sistema bancario europeo: raccoglie dati regolatori 
 | ecb_mir | BCE SDMX | 2003-2026 | 2 | Tassi attivi/passivi su mutui, imprese, consumo, depositi |
 | ecb_bls | BCE SDMX | 2003-2026 | 2 | Bank Lending Survey: condizioni e domanda di credito (indici di diffusione) |
 | wb_financial | World Bank | 1960-2025 | 2 | NPL, credito/PIL, filiali, ATM per 100k abitanti |
-| eba_panel | EBA | 2012-2025 | 2 | Dati per singola banca: CET1, ROE, leverage, esposizioni per paese |
+| eba_panel | EBA | 2012-2025 | 4 | Dati per singola banca: CET1, ROE, leverage, esposizioni per paese controparte e RWA |
 
 ### Contratto delle serie
 
@@ -41,6 +41,29 @@ unità e moltiplicatore. Niente medie tra serie diverse.
   serie sparisce (è già successo: la voce `A20T` non esiste più).
 - I test in `tests/test_mart_contract.py` fissano i valori golden e la copertura
   minima: un numero sbagliato rompe la CI, non arriva in dashboard.
+
+### EBA: banche singole ed esposizioni
+
+Il panel EBA (`eba_panel`) ha 4 mart:
+
+| Mart | Cosa risponde |
+|---|---|
+| `mart_banche_kpi` | CET1, ROE, leverage, attivo per banca e periodo |
+| `mart_banche_snapshot` | ultimo valore per banca, con il periodo di riferimento per colonna |
+| `mart_esposizioni` | dove è esposta ogni banca: 6 classi (sovrana, imprese, retail, istituzioni, equity, altro) × 95 paesi controparte × 39 periodi, con i relativi RWA |
+| `mart_banche_anagrafica` | nome, paese, LEI, stato SSM, copertura temporale |
+
+Note di lettura:
+
+- `mart_esposizioni` è la base di "chi finanzia lo Stato": al 2025H2 Intesa ha
+  124,5 mld di esposizione sovrana italiana, il 77% della sua esposizione verso
+  l'Italia.
+- `country_long_rank`, presente nel dataset di origine, è una colonna spuria
+  (contiene un'altra lista di paesi): viene scartata nel clean.
+- il campo `gruppo` non esiste: il panel identifica la banca (LEI), non il
+  gruppo di appartenenza. Per i gruppi serve l'albo Banca d'Italia.
+- i ratio sono in punti percentuali, gli importi in miliardi di euro.
+- CET1 e ROE partono dal 2015H2 e non sono ancora pubblicati per il 2025.
 
 ### Compose
 

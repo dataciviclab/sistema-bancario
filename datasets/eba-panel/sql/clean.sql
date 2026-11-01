@@ -1,71 +1,94 @@
--- clean.sql: EBA Panel — Dati per singola banca
--- Estrae i KPI chiave dal formato long (banca x periodo x variabile)
+-- clean.sql: EBA Panel — dati per singola banca (Transparency Exercise)
+--
+-- Contratto: solo le serie dichiarate in series_catalog.csv.
+--
+-- Rispetto alla versione precedente questo clean NON butta piu' via:
+--   * `country_long_code` -> paese_controparte: e' la dimensione che rende
+--     possibile "quanta esposizione sovrana italiana ha Intesa";
+--   * `lei_code`, `ssm`, `finrep` -> anagrafica e chiavi di aggancio;
+--   * `country_long_rank` viene scartata: nel dataset di origine e' una colonna
+--     spuria (contiene un'altra lista di paesi, non un rank).
+--
+-- Unita': i ratio EBA sono frazioni (0.1611) e vengono portati a punti
+-- percentuali; gli importi sono in milioni e diventano miliardi. Il
+-- moltiplicatore e' dichiarato nel catalogo, non sparso nelle query.
 
-WITH raw AS (
+WITH catalogo AS (
+    SELECT
+        metrica,
+        codice,
+        classe_esposizione,
+        descrizione,
+        unita,
+        CAST(moltiplicatore AS DOUBLE) AS moltiplicatore
+    FROM read_csv('datasets/eba-panel/series_catalog.csv', header = true, auto_detect = true)
+),
+
+-- Il paese controparte arriva dalla fonte come nome inglese ("Italy"), mentre
+-- `paese` e' ISO2 ("IT"). Senza questa mappa ogni consumatore dovrebbe
+-- ricostruirla a mano: e' la prima trappola per chi legge il mart.
+paesi AS (
+    SELECT
+        paese_controparte,
+        NULLIF(codice_paese_controparte, '') AS codice_paese_controparte,
+        CAST(e_aggregato AS BOOLEAN) AS e_aggregato
+    FROM read_csv('datasets/eba-panel/codelists/paesi_controparte.csv', header = true, auto_detect = true)
+),
+
+raw AS (
     SELECT * FROM raw_input
 ),
 
--- Filtra solo le variabili chiave
-filtered AS (
+normalizzato AS (
     SELECT
-        abbreviation AS banca,
-        name_short AS nome_banca,
-        bank_name AS nome_legale,
-        country AS paese,
-        desc_country AS nome_paese,
-        ssm AS tipo_ssm,
-        period AS periodo,
-        code AS codice_variabile,
-        name AS nome_variabile,
-        amount AS valore
+        CAST(abbreviation AS VARCHAR) AS banca,
+        CAST(name_short AS VARCHAR) AS nome_banca,
+        CAST(bank_name AS VARCHAR) AS nome_legale,
+        CAST(country AS VARCHAR) AS paese,
+        CAST(desc_country AS VARCHAR) AS nome_paese,
+        CAST(ssm AS VARCHAR) AS tipo_ssm,
+        CAST(finrep AS VARCHAR) AS finrep,
+        CAST(lei_code AS VARCHAR) AS lei,
+        CAST(code AS VARCHAR) AS codice,
+        -- Paese controparte: valorizzato solo per le serie "by country".
+        -- Discriminante: il codice appartiene alla famiglia esposizioni/RWA.
+        CASE
+            WHEN CAST(code AS VARCHAR) IN (
+                'FECPHD00294', 'FECPHD00297', 'FECPHD00299',
+                'FECPHD00300', 'FECPHD00304', 'FECPHD00307',
+                'FECPHD00376', 'FECPHD00379', 'FECPHD00382',
+                'FECPHD00386', 'FECPHD00389'
+            ) THEN CAST(country_long_code AS VARCHAR)
+            ELSE NULL
+        END AS paese_controparte,
+        CAST(period AS INTEGER) AS periodo,
+        -- Cadenza dichiarata: semestrale fino al 2017, trimestrale dal 2018.
+        CASE WHEN CAST(period AS INTEGER) < 201801 THEN 'semestrale' ELSE 'trimestrale' END AS cadenza,
+        CAST(amount AS DOUBLE) AS valore_grezzo
     FROM raw
-    WHERE code IN (
-        'FECPHD0020',  -- CET1 ratio (fully loaded)
-        'FECPHD0029',  -- Total capital ratio
-        'FECPHD0025',  -- Leverage ratio
-        'FECPHD01000', -- Return on equity
-        'FECPHD01001', -- Return on Tier 1 capital
-        'FECPHD01005', -- Net interest margin
-        'FECPHD00116', -- Total assets
-        'FECPHD00117', -- Total assets (alt)
-        'FECPHD01024', -- Log CET1 amount
-        'FECPHD01026', -- Log Tier 1 amount
-        'FECPHD01031', -- RWA IRB Corporates
-        'FECPHD00389', -- RWA by country SA Retail
-        'FECPHD00212', -- Original exposure SME
-        'FECPHD00294', -- Exposure value by country SA Central gov
-        'FECPHD00297', -- Exposure value by country SA Corporates
-        'FECPHD00307', -- Exposure value by country SA Retail
-        'FECPHD00299', -- Exposure value by country SA Equity
-        'FECPHD00304', -- Exposure value by country SA Other
-        'FECPHD00376', -- RWA by country SA Central gov
-        'FECPHD00379', -- RWA by country SA Corporates
-        'FECPHD00382', -- RWA by country SA Institutions
-        'FECPHD00386', -- RWA by country SA Other
-        'FECPHD00389', -- RWA by country SA Retail
-        'FECPHD01031', -- RWA IRB Corporates
-        'FECPHD00300', -- Exposure value by country SA Institutions
-        'FECPHD00212', -- Original exposure SME
-        'FECPHD00195', -- Original exposure by country SA Corporates
-        'FECPHD00193', -- Original exposure by country SA Claims CIU
-        'FECPHD00314', -- Exposure value by country SME SA Corporates SME
-        'FECPHD00396', -- RWA by country SME SA Corporates SME
-        'FECPHD01032', -- RWA defaulted IRB Corporates
-        'FECPHD01031'  -- RWA IRB Corporates
-    )
-    AND amount IS NOT NULL
+    WHERE amount IS NOT NULL
 )
 
 SELECT
-    banca,
-    nome_banca,
-    nome_legale,
-    paese,
-    nome_paese,
-    tipo_ssm,
-    CAST(periodo AS INTEGER) AS periodo,
-    codice_variabile,
-    nome_variabile,
-    CAST(valore AS DOUBLE) AS valore
-FROM filtered
-ORDER BY banca, periodo, codice_variabile
+    n.banca,
+    n.nome_banca,
+    n.nome_legale,
+    n.paese,
+    n.nome_paese,
+    n.tipo_ssm,
+    n.finrep,
+    n.lei,
+    n.periodo,
+    n.cadenza,
+    c.metrica,
+    c.descrizione,
+    c.unita,
+    c.classe_esposizione,
+    n.paese_controparte,
+    p.codice_paese_controparte,
+    COALESCE(p.e_aggregato, false) AS controparte_aggregata,
+    ROUND(n.valore_grezzo * c.moltiplicatore, 6) AS valore
+FROM normalizzato n
+JOIN catalogo c ON n.codice = c.codice
+LEFT JOIN paesi p ON n.paese_controparte = p.paese_controparte
+ORDER BY c.metrica, n.banca, n.periodo

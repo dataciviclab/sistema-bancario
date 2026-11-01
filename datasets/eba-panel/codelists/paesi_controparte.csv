@@ -1,0 +1,87 @@
+paese_controparte,codice_paese_controparte,e_aggregato
+Albania,AL,false
+Angola,AO,false
+Argentina,AR,false
+Australia,AU,false
+Austria,AT,false
+Azerbaijan,AZ,false
+Belgium,BE,false
+Bermuda,BM,false
+Bosnia and Herzegowina,BA,false
+Brazil,BR,false
+Bulgaria,BG,false
+CROATIA,HR,false
+Canada,CA,false
+Cape Verde,CV,false
+Cayman Islands,KY,false
+Channel Islands,,true
+Chile,CL,false
+China,CN,false
+Colombia,CO,false
+Cook Islands,CK,false
+Cyprus,CY,false
+Czech Republic,CZ,false
+Denmark,DK,false
+Egypt,EG,false
+Estonia,EE,false
+Faroe Islands,FO,false
+Finland,FI,false
+France,FR,false
+GUERNSEY,GG,false
+Germany,DE,false
+Greece,GR,false
+Hong Kong,HK,false
+Hungary,HU,false
+Iceland,IS,false
+India,IN,false
+International organisations,,true
+Ireland,IE,false
+Italy,IT,false
+JERSEY,JE,false
+Japan,JP,false
+Korea Republic_of,KR,false
+Kosovo,XK,false
+Latvia,LV,false
+Liberia,LR,false
+Lithuania,LT,false
+Luxembourg,LU,false
+Macao,MO,false
+Macedonia - The former Yugoslav Republic of,MK,false
+Malta,MT,false
+Marshall Islands,MH,false
+Mexico,MX,false
+Moldova,MD,false
+Monaco,MC,false
+Montenegro,ME,false
+Morocco,MA,false
+Mozambique,MZ,false
+Netherlands,NL,false
+New Zealand,NZ,false
+Norway,NO,false
+Other,,true
+Other Countries,,true
+Peru,PE,false
+Poland,PL,false
+Portugal,PT,false
+Qatar,QA,false
+Romania,RO,false
+Russian Federation,RU,false
+Saudi Arabia,SA,false
+Serbia,RS,false
+Singapore,SG,false
+Slovakia,SK,false
+Slovenia,SI,false
+South Africa,ZA,false
+Spain,ES,false
+Sweden,SE,false
+Switzerland,CH,false
+Taiwan Province of China,TW,false
+Turkey,TR,false
+Ukraine,UA,false
+United Arab Emirates,AE,false
+United Kingdom,GB,false
+United States,US,false
+Uzbekistan,UZ,false
+"VIRGIN ISLANDS, BRITISH",VG,false
+"VIRGIN ISLANDS, U.S.",VI,false
+Venezuela,VE,false

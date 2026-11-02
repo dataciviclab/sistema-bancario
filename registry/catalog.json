@@ -1,6 +1,6 @@
 {
   "source_id": "ecb",
-  "generated_at": "2026-10-28T16:02:34+00:00",
+  "generated_at": "2026-11-02T13:08:03+00:00",
   "report_version": 1,
   "timing": {},
   "identity": {
@@ -11,19 +11,19 @@
     "observation_mode": "catalog-watch",
     "verdict": "go",
     "note": "Catalogo SDMX ECB (data-api.ecb.europa.eu). Il repo consuma 4 dataflow via http_file (BLS, BSI, CBD2, MIR) con format=csvdata. Attenzione: toolkit.extends dichiara 'sistema-bancario', i dataset.yml usano 'ecb'.",
-    "last_probed": "2026-10-28"
+    "last_probed": "2026-11-02"
   },
   "health": {
     "radar_status": "GREEN",
     "http_code": "200",
     "note": null,
     "ssl_fallback": false,
-    "streak": 5
+    "streak": 6
   },
   "inventory": {
     "total_items": 215,
     "method": null,
-    "captured_at": "2026-10-28T16:02:31+00:00",
+    "captured_at": "2026-11-02T13:07:47+00:00",
     "baseline_value": null,
     "baseline_date": null,
     "freshness_hours": 0.0,
@@ -34,7 +34,7 @@
     }
   },
   "source_check": {
-    "last_run": "2026-10-28T16:02:34Z",
+    "last_run": "2026-11-02T13:08:03Z",
     "total_scored": 191,
     "reachable": 191,
     "csv_count": 0,
@@ -93,7 +93,7 @@
       "upstream": [
         {
           "kind": "url",
-          "id": "https://data-api.ecb.europa.eu/service/data/BLS?format=csvdata"
+          "id": "https://data-api.ecb.europa.eu/service/data/BLS/Q..ALL.O+SME+LE+Z+MAL+MRL+NIC.E+H.Z+H+C.B3.ST+ZZ+TC+RA.S+D.DINX?format=csvdata&startPeriod=2003-01"
         }
       ]
     },
@@ -103,7 +103,7 @@
       "upstream": [
         {
           "kind": "url",
-          "id": "https://data-api.ecb.europa.eu/service/data/BSI?format=csvdata&startPeriod=2020"
+          "id": "https://data-api.ecb.europa.eu/service/data/BSI/Q..N.A+B.T00+A20+L20+L40+L60.A+X.1.Z5+U2+U6.0000+1000+2000+2110+2300.Z01.E?format=csvdata&startPeriod=2003-01"
         }
       ]
     },
@@ -113,7 +113,11 @@
       "upstream": [
         {
           "kind": "url",
-          "id": "https://data-api.ecb.europa.eu/service/data/CBD2?format=csvdata&startPeriod=2015"
+          "id": "https://data-api.ecb.europa.eu/service/data/CBD2/Q..W0.11._Z._Z.A..I2003+I2004+I2100+I2410+I3006+I3017+I3160+I3631+I3632+I4001+I4002+I4008._Z._Z._Z._Z._Z._Z.PC?format=csvdata&startPeriod=2015-01"
+        },
+        {
+          "kind": "url",
+          "id": "https://data-api.ecb.europa.eu/service/data/CBD2/Q..W0.11.S1M+S11+S13+S1U._Z.A.F.I3160+I3632._Z._Z._Z._Z._Z._Z.PC?format=csvdata&startPeriod=2015-01"
         }
       ]
     },
@@ -123,7 +127,7 @@
       "upstream": [
         {
           "kind": "url",
-          "id": "https://data-api.ecb.europa.eu/service/data/MIR?format=csvdata&startPeriod=2020"
+          "id": "https://data-api.ecb.europa.eu/service/data/MIR/M..B.A2C+A2A+A2B+L21+L22+L23.A+F+I+O.R.A+2.2240+2250.EUR.N?format=csvdata&startPeriod=2003-01"
         }
       ]
     }
@@ -146,8 +150,8 @@
   "repo": "sistema-bancario",
   "catalog_schema_version": 1,
   "referenced_items": {
-    "checked": 4,
-    "matched": 4,
+    "checked": 5,
+    "matched": 5,
     "missing": [],
     "unknown": []
   }

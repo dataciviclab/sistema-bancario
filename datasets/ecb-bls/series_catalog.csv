@@ -1,12 +1,18 @@
 metrica,serie_id,descrizione,unita,moltiplicatore
-cs_imprese,O|E|Z|B3|ST|S|DINX,"Condizioni di credito alle imprese (giudizio netto: positivo = stretta)","indice",1
-cs_pmi,SME|E|Z|B3|ST|S|DINX,"Condizioni di credito alle PMI","indice",1
-cs_grandi,LE|E|Z|B3|ST|S|DINX,"Condizioni di credito alle grandi imprese","indice",1
-cs_mutui,Z|H|H|B3|ST|S|DINX,"Condizioni di credito per mutui casa alle famiglie","indice",1
-cs_consumo,Z|H|C|B3|ST|S|DINX,"Condizioni di credito al consumo alle famiglie","indice",1
-domanda_imprese,O|E|Z|B3|ZZ|D|DINX,"Domanda di credito delle imprese (positivo = domanda in aumento)","indice",1
-domanda_mutui,Z|H|H|B3|ZZ|D|DINX,"Domanda di mutui casa delle famiglie","indice",1
-margins_prestiti,MAL|E|Z|B3|TC|S|DINX,"Margini sui prestiti ordinari alle imprese","indice",1
-margini_rischiosi,MRL|E|Z|B3|TC|S|DINX,"Margini sui prestiti piu' rischiosi alle imprese","indice",1
-spese_non_interesse,NIC|E|Z|B3|TC|S|DINX,"Spese non di interesse sul credito alle imprese","indice",1
-rifiutate_imprese,O|E|Z|B3|RA|D|DINX,"Saldo netto delle domande di credito respinte - imprese (positivo = piu' respinte)","indice",1
+cs_imprese,O|E|Z|B3|ST|S|DINX,Condizioni di credito alle imprese (giudizio netto: positivo = stretta),indice,1
+cs_pmi,SME|E|Z|B3|ST|S|DINX,Condizioni di credito alle PMI,indice,1
+cs_grandi,LE|E|Z|B3|ST|S|DINX,Condizioni di credito alle grandi imprese,indice,1
+cs_mutui,Z|H|H|B3|ST|S|DINX,Condizioni di credito per mutui casa alle famiglie,indice,1
+cs_consumo,Z|H|C|B3|ST|S|DINX,Condizioni di credito al consumo alle famiglie,indice,1
+domanda_imprese,O|E|Z|B3|ZZ|D|DINX,Domanda di credito delle imprese (positivo = domanda in aumento),indice,1
+domanda_mutui,Z|H|H|B3|ZZ|D|DINX,Domanda di mutui casa delle famiglie,indice,1
+margins_prestiti,MAL|E|Z|B3|TC|S|DINX,Margini sui prestiti ordinari alle imprese,indice,1
+margini_rischiosi,MRL|E|Z|B3|TC|S|DINX,Margini sui prestiti piu' rischiosi alle imprese,indice,1
+spese_non_interesse,NIC|E|Z|B3|TC|S|DINX,Spese non di interesse sul credito alle imprese,indice,1
+rifiutate_imprese,O|E|Z|B3|RA|D|DINX,Saldo netto delle domande di credito respinte - imprese (positivo = piu' respinte),indice,1
+det_attivita_economica,GEA|E|Z|B3|ST|S|DINX,Determinante: prospettive dell'attivita' economica generale,indice,1
+det_settore_specifico,IFO|E|Z|B3|ST|S|DINX,Determinante: situazione specifica del settore o dell'impresa,indice,1
+det_tolleranza_rischio,RTO|E|Z|B3|ST|S|DINX,Determinante: tolleranza al rischio della banca,indice,1
+det_posizione_capitale,CP|E|Z|B3|ST|S|DINX,Determinante: posizione di capitale della banca,indice,1
+det_liquidita,LP|E|Z|B3|ST|S|DINX,Determinante: posizione di liquidita' della banca,indice,1
+det_concorrenza,BC|E|Z|B3|ST|S|DINX,Determinante: pressione concorrenziale delle banche,indice,1

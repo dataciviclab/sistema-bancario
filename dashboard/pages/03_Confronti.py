@@ -8,7 +8,7 @@ from sources import load_snapshot, load_tassi_snapshot, load_bsi_snapshot
 
 st.title("⚖️ Confronti Paesi")
 
-EXCLUDE = ["U2", "GB", "U5"]
+from config import PAESI_ESCLUSI as EXCLUDE  # noqa: E402
 
 df_bank = load_snapshot()
 df_mir = load_tassi_snapshot()

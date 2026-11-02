@@ -531,3 +531,33 @@ def test_bsi_crediti_settore_fine_periodo():
 
     somma = df["prestiti_famiglie_mld"].fillna(0) + df["prestiti_imprese_mld"].fillna(0)
     assert (somma - df["prestiti_famiglie_imprese_mld"]).abs().max() < 0.2
+
+
+def test_cbd2_benchmark_separato():
+    """Gli aggregati stanno in un mart dedicato, non nel mart per paese.
+
+    Se finissero in `mart_bank_kpi`, ogni media o join li conterebbe come se
+    fossero un paese.
+    """
+    bench = _mart("ecb_cbd2", "mart_benchmark")
+    assert set(bench["area"]) == {"U2", "B0"}
+    riga = bench[(bench.area == "U2") & (bench.anno == 2024) & (bench.trimestre == "T4")]
+    assert len(riga) == 1
+    assert riga.iloc[0]["roe_pct"] == pytest.approx(13.7, abs=6)  # area euro, non Italia
+    assert riga.iloc[0]["area_nome"] == "Area euro"
+
+    kpi = _mart("ecb_cbd2", "mart_bank_kpi")
+    assert not set(kpi["paese"].unique()) & {"U2", "B0"}
+
+
+def test_cbd2_snapshot_solo_esercizio():
+    """ROE/ROA/margine sono cumulati sull'anno: lo snapshot usa solo i T4.
+
+    Prendere un primo trimestre mostrerebbe 3,4% invece del 13,5% dell'anno.
+    """
+    snap = _mart("ecb_cbd2", "mart_bank_snapshot")
+    assert (snap["trimestre"] == "T4").all()
+    it = snap[snap.paese == "IT"]
+    assert len(it) == 1
+    assert it.iloc[0]["anno"] == 2025
+    assert it.iloc[0]["roe_pct"] == pytest.approx(13.52, abs=0.05)

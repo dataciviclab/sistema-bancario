@@ -65,7 +65,9 @@ mart:
       sql: "sql/mart_bank_kpi.sql"
     - name: "mart_bank_snapshot"
       sql: "sql/mart_bank_snapshot.sql"
-  required_tables: ["mart_bank_kpi", "mart_bank_snapshot"]
+    - name: "mart_benchmark"
+      sql: "sql/mart_benchmark.sql"
+  required_tables: ["mart_bank_kpi", "mart_bank_snapshot", "mart_benchmark"]
   validate:
     table_rules:
       mart_bank_kpi:
@@ -76,3 +78,6 @@ mart:
       mart_bank_snapshot:
         not_null: [paese, roe_pct]
         min_rows: 20
+      mart_benchmark:
+        not_null: [area, anno, trimestre, roe_pct]
+        min_rows: 40

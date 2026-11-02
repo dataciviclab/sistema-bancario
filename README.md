@@ -76,6 +76,12 @@ Note di lettura:
   entità diverse con lo stesso LEI master: lì il valore scelto è il maggiore
   e non è verificabile senza il bilancio della banca.
 - i ratio sono in punti percentuali, gli importi in miliardi di euro.
+- **ROE, ROA e margine d'interesse di CBD2 sono cumulati sull'anno** (in Italia
+  2024: 3,91 → 7,89 → 10,95 → 13,73). `mart_bank_snapshot` usa solo i quarti
+  trimestri, così il confronto tra paesi è su esercizi completi.
+- gli aggregati ufficiali (area euro, Unione europea) stanno in
+  `mart_benchmark`, mai nei mart per paese: chi fa medie o join non li conta
+  come se fossero paesi.
 - per alcune voci (attività finanziarie, RWA per credito) il dataset di origine
   riporta più osservazioni per la stessa banca/periodo/codice, senza una
   dimensione che le distingua (fino al 96% delle celle). Il mart prende il

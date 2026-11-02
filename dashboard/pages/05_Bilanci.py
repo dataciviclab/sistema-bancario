@@ -9,7 +9,7 @@ from sources import load_bilanci_all, load_crediti_settore, load_deposits_all, l
 
 st.title("🏦 Bilanci MFI")
 
-EXCLUDE = ["U2", "GB", "U5"]
+from config import PAESI_ESCLUSI as EXCLUDE  # noqa: E402
 
 df_bal = load_bilanci_all()
 df_dep = load_deposits_all()

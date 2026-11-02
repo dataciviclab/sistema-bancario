@@ -6,7 +6,7 @@ import plotly.graph_objects as go
 
 from sources import (
     load_snapshot, load_wb_indicators, load_bls_credit,
-    load_panorama, get_last_updated,
+    load_panorama, get_last_updated, load_benchmark,
 )
 from context import get_kpi_status, get_status_color, get_status_emoji, KPI_CONTEXT
 
@@ -19,7 +19,7 @@ with st.sidebar.expander("📋 Glossario KPI", expanded=False):
         st.markdown(f"**{ctx['label']}**")
         st.caption(ctx['spiegazione'])
 
-EXCLUDE = ["U2", "GB", "U5"]
+from config import PAESI_ESCLUSI as EXCLUDE  # noqa: E402
 
 # --- Load data ---
 df_bank = load_snapshot()
@@ -34,10 +34,27 @@ if df_bank.empty:
 # ============================================================
 # KPI ITALIA con status
 # ============================================================
-st.subheader("Indicatori Chiave — Italia")
-
 df_it = df_bank[df_bank["paese"] == "IT"]
-df_ea = df_bank[df_bank["paese"] == "U2"]
+
+_anno_it = int(df_it.iloc[0]["anno"]) if not df_it.empty else None
+st.subheader(f"Indicatori Chiave — Italia ({_anno_it})" if _anno_it else "Indicatori Chiave — Italia")
+st.caption("Valori d'esercizio: ROE, ROA e margine sono cumulati sull'anno, non sul trimestre.")
+
+# Benchmark ufficiale: U2 = area euro (codelist CL_AREA della BCE). Gli
+# aggregati vivono in mart_benchmark, non nel mart per paese, per non
+# sporcare join e medie.
+df_bench = load_benchmark()
+bench_ea = None
+if not df_it.empty and not df_bench.empty:
+    anno_it = df_it.iloc[0]["anno"]
+    trim_it = df_it.iloc[0]["trimestre"]
+    riga = df_bench[
+        (df_bench["area"] == "U2")
+        & (df_bench["anno"] == anno_it)
+        & (df_bench["trimestre"] == trim_it)
+    ]
+    if not riga.empty:
+        bench_ea = riga.iloc[0]
 
 kpis = [
     ("roe_pct", "ROE"),
@@ -49,13 +66,13 @@ kpis = [
 cols = st.columns(4)
 for i, (kpi, short) in enumerate(kpis):
     val_it = df_it[kpi].values[0] if not df_it.empty and kpi in df_it.columns else None
-    val_ea = df_ea[kpi].values[0] if not df_ea.empty and kpi in df_ea.columns else None
+    val_ea = bench_ea[kpi] if bench_ea is not None and kpi in bench_ea.index else None
 
     if val_it is not None:
         status = get_kpi_status(kpi, val_it)
         emoji = get_status_emoji(status)
         ctx = KPI_CONTEXT[kpi]
-        delta = f"{val_it - val_ea:+.1f} vs U2" if val_ea is not None else None
+        delta = f"{val_it - val_ea:+.1f} vs area euro" if val_ea is not None else None
         cols[i].metric(
             f"{emoji} {short}",
             f"{val_it:.1f}{ctx['unita']}",

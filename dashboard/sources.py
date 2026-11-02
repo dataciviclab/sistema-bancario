@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from datetime import date
+
 import pandas as pd
 import streamlit as st
 from pathlib import Path
@@ -36,20 +38,36 @@ def _mart(slug: str, table: str, year: int | None = None) -> pd.DataFrame:
     return load_mart_table(slug, table, year, prefix=PREFIX, local_root=LOCAL_ROOT)
 
 
+from config import PAESI_ESCLUSI  # noqa: E402  (costante unica, vedi config.py)
+
+_MESI = (
+    "gennaio", "febbraio", "marzo", "aprile", "maggio", "giugno",
+    "luglio", "agosto", "settembre", "ottobre", "novembre", "dicembre",
+)
+
+
 def get_last_updated() -> str:
-    return "N/A"
+    """Data di aggiornamento del registry, rigenerato dal workflow post-merge."""
+    raw = getattr(_registry, "updated_at", None)
+    if not raw:
+        return "n/d"
+    try:
+        d = date.fromisoformat(str(raw)[:10])
+    except ValueError:
+        return str(raw)
+    return f"{d.day} {_MESI[d.month - 1]} {d.year}"
 
 
 # --- CBD2: KPI bancari ---
 
 @st.cache_data(ttl=3600, show_spinner=False)
-def load_kpi(year: int = 2026) -> pd.DataFrame:
-    return _mart("ecb_cbd2", "mart_bank_kpi", year)
+def load_kpi(year: int | None = None) -> pd.DataFrame:
+    return _mart("ecb_cbd2", "mart_bank_kpi", year or _latest_year("ecb_cbd2"))
 
 
 @st.cache_data(ttl=3600, show_spinner=False)
-def load_snapshot(year: int = 2026) -> pd.DataFrame:
-    return _mart("ecb_cbd2", "mart_bank_snapshot", year)
+def load_snapshot(year: int | None = None) -> pd.DataFrame:
+    return _mart("ecb_cbd2", "mart_bank_snapshot", year or _latest_year("ecb_cbd2"))
 
 
 @st.cache_data(ttl=3600, show_spinner=False)
@@ -68,18 +86,18 @@ def load_kpi_all() -> pd.DataFrame:
 # --- BSI: Bilanci MFI ---
 
 @st.cache_data(ttl=3600, show_spinner=False)
-def load_bilanci(year: int = 2026) -> pd.DataFrame:
-    return _mart("ecb_bsi", "mart_bsi_balance", year)
+def load_bilanci(year: int | None = None) -> pd.DataFrame:
+    return _mart("ecb_bsi", "mart_bsi_balance", year or _latest_year("ecb_bsi"))
 
 
 @st.cache_data(ttl=3600, show_spinner=False)
-def load_deposits(year: int = 2026) -> pd.DataFrame:
-    return _mart("ecb_bsi", "mart_bsi_deposits", year)
+def load_deposits(year: int | None = None) -> pd.DataFrame:
+    return _mart("ecb_bsi", "mart_bsi_deposits", year or _latest_year("ecb_bsi"))
 
 
 @st.cache_data(ttl=3600, show_spinner=False)
-def load_bsi_snapshot(year: int = 2026) -> pd.DataFrame:
-    return _mart("ecb_bsi", "mart_bsi_snapshot", year)
+def load_bsi_snapshot(year: int | None = None) -> pd.DataFrame:
+    return _mart("ecb_bsi", "mart_bsi_snapshot", year or _latest_year("ecb_bsi"))
 
 
 @st.cache_data(ttl=3600, show_spinner=False)
@@ -111,13 +129,13 @@ def load_deposits_all() -> pd.DataFrame:
 # --- MIR: Tassi di interesse ---
 
 @st.cache_data(ttl=3600, show_spinner=False)
-def load_tassi(year: int = 2026) -> pd.DataFrame:
-    return _mart("ecb_mir", "mart_mir_rates", year)
+def load_tassi(year: int | None = None) -> pd.DataFrame:
+    return _mart("ecb_mir", "mart_mir_rates", year or _latest_year("ecb_mir"))
 
 
 @st.cache_data(ttl=3600, show_spinner=False)
-def load_tassi_snapshot(year: int = 2026) -> pd.DataFrame:
-    return _mart("ecb_mir", "mart_mir_snapshot", year)
+def load_tassi_snapshot(year: int | None = None) -> pd.DataFrame:
+    return _mart("ecb_mir", "mart_mir_snapshot", year or _latest_year("ecb_mir"))
 
 
 @st.cache_data(ttl=3600, show_spinner=False)
@@ -149,19 +167,19 @@ def load_wb_indicators() -> pd.DataFrame:
 
 @st.cache_data(ttl=3600, show_spinner=False)
 def load_bls_snapshot() -> pd.DataFrame:
-    return _mart("ecb_bls", "mart_bls_snapshot", 2026)
+    return _mart("ecb_bls", "mart_bls_snapshot", _latest_year("ecb_bls"))
 
 
 @st.cache_data(ttl=3600, show_spinner=False)
 def load_bls_credit() -> pd.DataFrame:
-    return _mart("ecb_bls", "mart_bls_credit", 2026)
+    return _mart("ecb_bls", "mart_bls_credit", _latest_year("ecb_bls"))
 
 
 # --- Compose: Vista unificata ---
 
 @st.cache_data(ttl=3600, show_spinner=False)
 def load_panorama() -> pd.DataFrame:
-    return _mart("banche_unified", "mart_panorama", 2026)
+    return _mart("banche_unified", "mart_panorama", _latest_year("banche_unified"))
 
 
 # --- EBA Panel: Dati per singola banca ---
@@ -230,6 +248,20 @@ def load_crediti_settore() -> pd.DataFrame:
     for y in _years("ecb_bsi"):
         try:
             df = _mart("ecb_bsi", "mart_bsi_crediti", y)
+            if not df.empty:
+                frames.append(df)
+        except Exception:
+            pass
+    return pd.concat(frames, ignore_index=True) if frames else pd.DataFrame()
+
+
+@st.cache_data(ttl=3600, show_spinner=False)
+def load_benchmark() -> pd.DataFrame:
+    """Aggregati ufficiali BCE: U2 = area euro, B0 = Unione europea."""
+    frames = []
+    for y in _years("ecb_cbd2"):
+        try:
+            df = _mart("ecb_cbd2", "mart_benchmark", y)
             if not df.empty:
                 frames.append(df)
         except Exception:

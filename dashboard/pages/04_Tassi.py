@@ -9,7 +9,7 @@ from sources import load_tassi_all, load_tassi_snapshot, load_volumi
 
 st.title("📈 Tassi di Interesse Bancari")
 
-EXCLUDE = ["U2", "GB", "U5"]
+from config import PAESI_ESCLUSI as EXCLUDE  # noqa: E402
 
 df_rates = load_tassi_all()
 df_snap = load_tassi_snapshot()

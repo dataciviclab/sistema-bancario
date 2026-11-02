@@ -1,7 +1,11 @@
--- mart_bank_snapshot: ultimo trimestre disponibile per paese
+-- mart_bank_snapshot: ultimo ESERCIZIO disponibile per paese
 --
--- Stesse serie dichiarate di mart_bank_kpi, stesso perimetro: un confronto
--- cross-country non deve mostrare numeri diversi dalla serie trimestrale.
+-- Perche' solo i quarti trimestri: ROE, ROA e margine d'interesse sono
+-- CUMULATI dall'inizio dell'anno (in Italia: 3,91 -> 7,89 -> 10,95 -> 13,73
+-- nel 2024). Prendere l'ultimo trimestre disponibile mostrerebbe il 3,4% di un
+-- primo trimestre come se fosse la redditivita' dell'anno.
+-- Il resto delle voci (CET1, NPL, LCR) e' una fotografia: il valore di
+-- dicembre va bene anche per quelle.
 
 WITH serie AS (
     SELECT
@@ -17,7 +21,7 @@ WITH serie AS (
         MAX(CASE WHEN metrica = 'lcr' THEN valore END) AS lcr_pct,
         MAX(CASE WHEN metrica = 'prestiti_depositi' THEN valore END) AS prestiti_deposits_pct
     FROM clean_input
-    WHERE trimestre IS NOT NULL
+    WHERE trimestre = 'T4'
       AND LENGTH(paese) = 2
       AND paese NOT IN ('U2', 'U5', '4F', 'B0')
     GROUP BY paese, anno, trimestre

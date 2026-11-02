@@ -9,7 +9,7 @@ from sources import load_kpi_all, load_bilanci_all, load_deposits_all, load_tass
 
 st.title("🇮🇹 Italia — Sistema Bancario")
 
-EXCLUDE = ["U2", "GB", "U5"]
+from config import PAESI_ESCLUSI as EXCLUDE  # noqa: E402
 
 # --- Load all data ---
 df_kpi = load_kpi_all()

@@ -15,7 +15,7 @@ from sources import (
 st.title("🏦 Banche Singole")
 st.caption("Dati EBA Transparency Exercise — singole banche EU/EEA (2012–2025)")
 
-EXCLUDE = ["U2", "GB", "U5"]
+from config import PAESI_ESCLUSI as EXCLUDE  # noqa: E402
 
 df_snap = load_banche_snapshot()
 df_kpi = load_banche_kpi()

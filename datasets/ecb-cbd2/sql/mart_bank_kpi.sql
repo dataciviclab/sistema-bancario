@@ -4,6 +4,12 @@
 -- serie: ogni MAX(CASE ...) seleziona una sola serie, gia' normalizzata in
 -- punti percentuali dal clean.
 -- Aggregati BCE esclusi dal campo `paese`: B0 = area euro, U2 = Unione europea.
+--
+-- ATTENZIONE: `roe_pct`, `roa_pct` e `margine_interesse_pct` sono CUMULATI
+-- dall'inizio dell'anno (YTD), non valori trimestrali: nel 2024 in Italia
+-- valgono 3,91 / 7,89 / 10,95 / 13,73. Per confronti tra anni usare il T4
+-- (vedi mart_bank_snapshot); costo/reddito e le altre voci sono invece una
+-- fotografia del periodo.
 
 WITH serie AS (
     SELECT

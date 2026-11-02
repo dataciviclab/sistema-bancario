@@ -8,7 +8,7 @@ from sources import load_wb_indicators, load_bls_credit
 
 st.title("📊 Tendenze Storiche")
 
-EXCLUDE = ["U2", "GB", "U5"]
+from config import PAESI_ESCLUSI as EXCLUDE  # noqa: E402
 
 df_wb = load_wb_indicators()
 df_bls = load_bls_credit()

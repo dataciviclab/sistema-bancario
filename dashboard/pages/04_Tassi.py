@@ -5,7 +5,7 @@ import streamlit as st
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
-from sources import load_tassi_all, load_tassi_snapshot
+from sources import load_tassi_all, load_tassi_snapshot, load_volumi
 
 st.title("📈 Tassi di Interesse Bancari")
 
@@ -13,6 +13,7 @@ EXCLUDE = ["U2", "GB", "U5"]
 
 df_rates = load_tassi_all()
 df_snap = load_tassi_snapshot()
+df_vol = load_volumi()
 
 if df_rates.empty:
     st.warning("Nessun dato disponibile.")
@@ -107,3 +108,33 @@ if not df_c.empty:
         figp.update_layout(yaxis_title="Tasso (%)", height=350, margin={"t": 30})
         st.plotly_chart(figp, width="stretch")
         st.caption("Le imprese piu' piccole pagano un premio: e' il costo del credito che non vedi nei titoli.")
+
+# ============================================================
+# QUANTO CREDITO NUOVO
+# ============================================================
+st.subheader(f"Nuovo credito per trimestre — {country}")
+
+if not df_vol.empty:
+    df_v = df_vol[df_vol["paese"] == country].copy()
+    if not df_v.empty:
+        df_v["periodo_label"] = df_v["anno"].astype(str) + " " + df_v["trimestre"]
+        df_v = df_v.sort_values(["anno", "trimestre"])
+
+        figv = go.Figure()
+        if "volume_mutui_mld" in df_v.columns:
+            figv.add_trace(go.Bar(x=df_v["periodo_label"], y=df_v["volume_mutui_mld"],
+                                  name="Mutui casa", marker_color="#6366f1"))
+        if "volume_prestiti_imprese_mld" in df_v.columns:
+            figv.add_trace(go.Bar(x=df_v["periodo_label"], y=df_v["volume_prestiti_imprese_mld"],
+                                  name="Prestiti alle imprese", marker_color="#f59e0b"))
+        figv.update_layout(barmode="group", yaxis_title="Miliardi € nel trimestre",
+                           height=350, margin={"t": 30})
+        st.plotly_chart(figv, width="stretch")
+
+        if "quota_piccole_imprese_pct" in df_v.columns:
+            quota = df_v["quota_piccole_imprese_pct"].dropna()
+            if not quota.empty:
+                st.caption(
+                    f"Flussi trimestrali (somma dei tre mesi). Alle imprese fino a 1 mln "
+                    f"va il {quota.iloc[-1]:.0f}% del nuovo credito alle imprese."
+                )

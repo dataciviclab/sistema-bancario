@@ -9,3 +9,7 @@ tasso_consumo,A2B|B|A|R|A|2250|EUR|N,"Tasso sui nuovi prestiti al consumo delle 
 tasso_depositi_overnight,L21|B|A|R|A|2250|EUR|N,"Tasso sui depositi a vista delle famiglie","% annuo",1
 tasso_depositi_scadenza,L22|B|A|R|A|2250|EUR|N,"Tasso sui depositi a scadenza delle famiglie","% annuo",1
 tasso_depositi_preavviso,L23|B|A|R|A|2250|EUR|N,"Tasso sui depositi con preavviso delle famiglie","% annuo",1
+volume_mutui,A2C|B|A|B|A|2250|EUR|N,"Nuovi mutui casa alle famiglie: flusso mensile","mln EUR",0.001
+volume_consumo,A2B|B|A|B|A|2250|EUR|N,"Nuovo credito al consumo alle famiglie: flusso mensile","mln EUR",0.001
+volume_prestiti_piccole,A2A|B|A|B|0|2240|EUR|N,"Nuovi prestiti alle imprese fino a 1 mln: flusso mensile","mln EUR",0.001
+volume_prestiti_grandi,A2A|B|A|B|1|2240|EUR|N,"Nuovi prestiti alle imprese oltre 1 mln: flusso mensile","mln EUR",0.001

@@ -19,7 +19,14 @@ WITH serie AS (
         MAX(CASE WHEN metrica = 'margins_prestiti' THEN valore END) AS margins_prestiti,
         MAX(CASE WHEN metrica = 'margini_rischiosi' THEN valore END) AS margini_rischiosi,
         MAX(CASE WHEN metrica = 'spese_non_interesse' THEN valore END) AS spese_non_interesse,
-        MAX(CASE WHEN metrica = 'rifiutate_imprese' THEN valore END) AS rifiutate_imprese_pct
+        MAX(CASE WHEN metrica = 'rifiutate_imprese' THEN valore END) AS rifiutate_imprese_pct,
+        -- Determinanti: da cosa dipende la stretta
+        MAX(CASE WHEN metrica = 'det_attivita_economica' THEN valore END) AS det_attivita_economica,
+        MAX(CASE WHEN metrica = 'det_settore_specifico' THEN valore END) AS det_settore_specifico,
+        MAX(CASE WHEN metrica = 'det_tolleranza_rischio' THEN valore END) AS det_tolleranza_rischio,
+        MAX(CASE WHEN metrica = 'det_posizione_capitale' THEN valore END) AS det_posizione_capitale,
+        MAX(CASE WHEN metrica = 'det_liquidita' THEN valore END) AS det_liquidita,
+        MAX(CASE WHEN metrica = 'det_concorrenza' THEN valore END) AS det_concorrenza
     FROM clean_input
     WHERE trimestre IS NOT NULL
       AND LENGTH(paese) = 2
@@ -42,6 +49,12 @@ SELECT
     ROUND(margini_rischiosi, 2) AS margini_rischiosi,
     ROUND(spese_non_interesse, 2) AS spese_non_interesse,
     ROUND(rifiutate_imprese_pct, 2) AS rifiutate_imprese_pct,
+    ROUND(det_attivita_economica, 2) AS det_attivita_economica,
+    ROUND(det_settore_specifico, 2) AS det_settore_specifico,
+    ROUND(det_tolleranza_rischio, 2) AS det_tolleranza_rischio,
+    ROUND(det_posizione_capitale, 2) AS det_posizione_capitale,
+    ROUND(det_liquidita, 2) AS det_liquidita,
+    ROUND(det_concorrenza, 2) AS det_concorrenza,
     -- Divario PMI vs grandi imprese: chi paga la stretta
     ROUND(cs_pmi - cs_grandi, 2) AS divario_pmi_grandi
 FROM serie

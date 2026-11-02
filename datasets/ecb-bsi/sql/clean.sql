@@ -56,6 +56,12 @@ normalizzato AS (
             WHEN TIME_PERIOD LIKE '%-Q2' THEN 'T2'
             WHEN TIME_PERIOD LIKE '%-Q3' THEN 'T3'
             WHEN TIME_PERIOD LIKE '%-Q4' THEN 'T4'
+            -- La sorgente dei crediti per settore e' mensile: il mese va
+            -- attribuito al trimestre, altrimenti quelle righe si perdono.
+            WHEN TIME_PERIOD LIKE '%-01' OR TIME_PERIOD LIKE '%-02' OR TIME_PERIOD LIKE '%-03' THEN 'T1'
+            WHEN TIME_PERIOD LIKE '%-04' OR TIME_PERIOD LIKE '%-05' OR TIME_PERIOD LIKE '%-06' THEN 'T2'
+            WHEN TIME_PERIOD LIKE '%-07' OR TIME_PERIOD LIKE '%-08' OR TIME_PERIOD LIKE '%-09' THEN 'T3'
+            WHEN TIME_PERIOD LIKE '%-10' OR TIME_PERIOD LIKE '%-11' OR TIME_PERIOD LIKE '%-12' THEN 'T4'
             ELSE NULL
         END AS trimestre
     FROM raw

@@ -27,12 +27,26 @@ raw:
         url: "https://data-api.ecb.europa.eu/service/data/MIR/M..B.A2C+A2A+A2B+L21+L22+L23.A+F+I+O.R.A+2.2240+2250.EUR.N?format=csvdata&startPeriod=2003-01"
         filename: "ecb_mir_raw.csv"
       primary: true
+    # Volumi: i nuovi prestiti erogati nel mese (DATA_TYPE_MIR=B). Sono flussi,
+    # quindi si SOMMANO nel trimestre, al contrario dei tassi che si mediano.
+    # Per le imprese non esiste un totale "tutti gli importi": il totale e'
+    # fino a 1 mln + oltre 1 mln.
+    - name: "ecb_mir_volumi"
+      type: "http_file"
+      client:
+        timeout: 300
+        retries: 2
+        user_agent: "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+      args:
+        url: "https://data-api.ecb.europa.eu/service/data/MIR/M..B.A2C+A2A+A2B.A.B.0+1+2+A.2240+2250.EUR.N?format=csvdata&startPeriod=2003-01"
+        filename: "ecb_mir_volumi.csv"
 
 clean:
   sql: "sql/clean.sql"
   read:
     source: auto
-    mode: latest
+    # mode: all -> legge tassi e volumi e li concatena in raw_input
+    mode: all
     delim: ","
     encoding: utf-8
     header: true
@@ -45,7 +59,7 @@ clean:
     - trimestre
     - serie_id
   validate:
-    min_rows: 20000
+    min_rows: 50000
 
 mart:
   tables:
@@ -53,7 +67,9 @@ mart:
       sql: "sql/mart_mir_rates.sql"
     - name: "mart_mir_snapshot"
       sql: "sql/mart_mir_snapshot.sql"
-  required_tables: ["mart_mir_rates", "mart_mir_snapshot"]
+    - name: "mart_mir_volumi"
+      sql: "sql/mart_mir_volumi.sql"
+  required_tables: ["mart_mir_rates", "mart_mir_snapshot", "mart_mir_volumi"]
   validate:
     table_rules:
       mart_mir_rates:
@@ -62,3 +78,6 @@ mart:
       mart_mir_snapshot:
         not_null: [paese, tasso_mutuo_pct]
         min_rows: 20
+      mart_mir_volumi:
+        not_null: [paese, anno, trimestre]
+        min_rows: 500

@@ -2,21 +2,24 @@
 --
 -- Contratto: solo le serie dichiarate in series_catalog.csv.
 --
--- Rispetto alla versione precedente questo clean NON butta piu' via:
---   * `country_long_code` -> paese_controparte: e' la dimensione che rende
---     possibile "quanta esposizione sovrana italiana ha Intesa";
---   * `lei_code`, `ssm`, `finrep` -> anagrafica e chiavi di aggancio;
---   * `country_long_rank` viene scartata: nel dataset di origine e' una colonna
---     spuria (contiene un'altra lista di paesi, non un rank).
+-- Tre cose che questo clean tiene e che la versione precedente perdeva:
+--   1. `metodo` (SA / IRB): la stessa esposizione e' pubblicata con due approcci
+--      regolamentari. Usare solo SA sottostima le banche che usano modelli
+--      interni (per alcune vale oltre l'80% dell'esposizione).
+--   2. `classe_esposizione`, per distinguere sovrana, imprese, retail, ecc.
+--      e per aggregare le classi minori in un residuo esplicito.
+--   3. `country_long_code` -> paese_controparte, con il codice ISO2 dal codelist.
 --
--- Unita': i ratio EBA sono frazioni (0.1611) e vengono portati a punti
--- percentuali; gli importi sono in milioni e diventano miliardi. Il
--- moltiplicatore e' dichiarato nel catalogo, non sparso nelle query.
+-- Scartata di proposito: `country_long_rank` (colonna spuria del dataset di
+-- origine: contiene un'altra lista di paesi) e le famiglie di sotto-dettaglio
+-- (SME, Retail type, Retail non-SME, Corp. SL), che duplicano le classi
+-- principali e gonfierebbero i totali.
 
 WITH catalogo AS (
     SELECT
         metrica,
         codice,
+        metodo,
         classe_esposizione,
         descrizione,
         unita,
@@ -24,9 +27,6 @@ WITH catalogo AS (
     FROM read_csv('datasets/eba-panel/series_catalog.csv', header = true, auto_detect = true)
 ),
 
--- Il paese controparte arriva dalla fonte come nome inglese ("Italy"), mentre
--- `paese` e' ISO2 ("IT"). Senza questa mappa ogni consumatore dovrebbe
--- ricostruirla a mano: e' la prima trappola per chi legge il mart.
 paesi AS (
     SELECT
         paese_controparte,
@@ -50,45 +50,72 @@ normalizzato AS (
         CAST(finrep AS VARCHAR) AS finrep,
         CAST(lei_code AS VARCHAR) AS lei,
         CAST(code AS VARCHAR) AS codice,
-        -- Paese controparte: valorizzato solo per le serie "by country".
-        -- Discriminante: il codice appartiene alla famiglia esposizioni/RWA.
+        CAST(period AS INTEGER) AS periodo,
+        CASE WHEN CAST(period AS INTEGER) < 201801 THEN 'semestrale' ELSE 'trimestrale' END AS cadenza,
+        CAST(amount AS DOUBLE) AS valore_grezzo,
+        -- Il paese controparte esiste solo per le serie "by country": lo decide
+        -- il catalogo, non una lista di codici scritta a mano.
         CASE
             WHEN CAST(code AS VARCHAR) IN (
-                'FECPHD00294', 'FECPHD00297', 'FECPHD00299',
-                'FECPHD00300', 'FECPHD00304', 'FECPHD00307',
-                'FECPHD00376', 'FECPHD00379', 'FECPHD00382',
-                'FECPHD00386', 'FECPHD00389'
+                SELECT codice FROM catalogo WHERE classe_esposizione IS NOT NULL
             ) THEN CAST(country_long_code AS VARCHAR)
             ELSE NULL
-        END AS paese_controparte,
-        CAST(period AS INTEGER) AS periodo,
-        -- Cadenza dichiarata: semestrale fino al 2017, trimestrale dal 2018.
-        CASE WHEN CAST(period AS INTEGER) < 201801 THEN 'semestrale' ELSE 'trimestrale' END AS cadenza,
-        CAST(amount AS DOUBLE) AS valore_grezzo
+        END AS paese_controparte
     FROM raw
     WHERE amount IS NOT NULL
+),
+
+arricchito AS (
+    SELECT
+        n.banca,
+        n.nome_banca,
+        n.nome_legale,
+        n.paese,
+        n.nome_paese,
+        n.tipo_ssm,
+        n.finrep,
+        n.lei,
+        n.periodo,
+        n.cadenza,
+        c.metrica,
+        c.metodo,
+        c.classe_esposizione,
+        c.descrizione,
+        c.unita,
+        n.paese_controparte,
+        p.codice_paese_controparte,
+        COALESCE(p.e_aggregato, false) AS controparte_aggregata,
+        ROUND(n.valore_grezzo * c.moltiplicatore, 6) AS valore,
+        -- Quante righe di origine alimentano la stessa banca/periodo/serie.
+        -- Il dataset EBA riporta piu' osservazioni per la stessa cella: alcune
+        -- sono un totale seguito dalle sue componenti, altre sono entita'
+        -- diverse con lo stesso LEI master. Serve per l'audit e per i test.
+        COUNT(*) OVER (PARTITION BY n.banca, n.periodo, c.metrica) AS voci_origine
+    FROM normalizzato n
+    JOIN catalogo c ON n.codice = c.codice
+    LEFT JOIN paesi p ON n.paese_controparte = p.paese_controparte
 )
 
 SELECT
-    n.banca,
-    n.nome_banca,
-    n.nome_legale,
-    n.paese,
-    n.nome_paese,
-    n.tipo_ssm,
-    n.finrep,
-    n.lei,
-    n.periodo,
-    n.cadenza,
-    c.metrica,
-    c.descrizione,
-    c.unita,
-    c.classe_esposizione,
-    n.paese_controparte,
-    p.codice_paese_controparte,
-    COALESCE(p.e_aggregato, false) AS controparte_aggregata,
-    ROUND(n.valore_grezzo * c.moltiplicatore, 6) AS valore
-FROM normalizzato n
-JOIN catalogo c ON n.codice = c.codice
-LEFT JOIN paesi p ON n.paese_controparte = p.paese_controparte
-ORDER BY c.metrica, n.banca, n.periodo
+    banca,
+    nome_banca,
+    nome_legale,
+    paese,
+    nome_paese,
+    tipo_ssm,
+    finrep,
+    lei,
+    periodo,
+    cadenza,
+    metrica,
+    metodo,
+    classe_esposizione,
+    descrizione,
+    unita,
+    paese_controparte,
+    codice_paese_controparte,
+    controparte_aggregata,
+    valore,
+    voci_origine
+FROM arricchito
+ORDER BY metrica, banca, periodo

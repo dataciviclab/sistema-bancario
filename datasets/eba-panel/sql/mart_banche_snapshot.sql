@@ -37,7 +37,9 @@ SELECT
     MAX(CASE WHEN metrica = 'capitale_totale' THEN ROUND(valore, 2) END) AS capitale_totale_pct,
     MAX(CASE WHEN metrica = 'leverage' THEN ROUND(valore, 2) END) AS leverage_pct,
     MAX(CASE WHEN metrica = 'roe' THEN ROUND(valore, 2) END) AS roe_pct,
-    MAX(CASE WHEN metrica = 'return_tier1' THEN ROUND(valore, 2) END) AS return_tier1_pct
+    MAX(CASE WHEN metrica = 'return_tier1' THEN ROUND(valore, 2) END) AS return_tier1_pct,
+    MAX(CASE WHEN metrica = 'utile_netto_ytd' THEN CAST(periodo AS VARCHAR) END) AS periodo_utile,
+    MAX(CASE WHEN metrica = 'utile_netto_ytd' THEN ROUND(valore, 1) END) AS utile_netto_ytd_mld
 FROM latest
 GROUP BY banca, nome_banca, paese, nome_paese, tipo_ssm
 ORDER BY attivo_totale_mld DESC NULLS LAST

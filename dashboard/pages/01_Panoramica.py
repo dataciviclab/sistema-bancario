@@ -174,7 +174,17 @@ if not df_bls.empty:
                 x=bls_it["periodo"], y=bls_it["domanda_credito_imprese"], name="Domanda credito",
                 line=dict(color="#22c55e", width=2),
             ))
+        if "det_attivita_economica" in bls_it.columns:
+            fig_bls.add_trace(go.Scatter(
+                x=bls_it["periodo"], y=bls_it["det_attivita_economica"],
+                name="Determinante: attivita' economica",
+                line=dict(color="#f59e0b", width=2, dash="dash"),
+            ))
         fig_bls.add_hline(y=0, line_dash="dash", line_color="gray")
         fig_bls.update_layout(yaxis_title="Indice diffusione", height=300, margin={"t": 30})
         st.plotly_chart(fig_bls, width="stretch")
-        st.caption("Positivo = le banche stringono i criteri / cresce la domanda. Negativo = allentano / cala.")
+        st.caption(
+            "Positivo = le banche stringono i criteri / cresce la domanda. Negativo = allentano / cala. "
+            "La linea tratteggiata e' la determinante principale: la stretta del 2022-23 e' venuta "
+            "da prospettive economiche e rischio percepito, non dal capitale."
+        )

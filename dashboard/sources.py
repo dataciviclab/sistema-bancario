@@ -193,3 +193,45 @@ def load_esposizioni() -> pd.DataFrame:
 @st.cache_data(ttl=3600, show_spinner=False)
 def load_banche_anagrafica() -> pd.DataFrame:
     return _mart("eba_panel", "mart_banche_anagrafica", _latest_year("eba_panel"))
+
+
+@st.cache_data(ttl=3600, show_spinner=False)
+def load_volumi() -> pd.DataFrame:
+    """Nuovo credito per trimestre (flussi MIR)."""
+    frames = []
+    for y in _years("ecb_mir"):
+        try:
+            df = _mart("ecb_mir", "mart_mir_volumi", y)
+            if not df.empty:
+                frames.append(df)
+        except Exception:
+            pass
+    return pd.concat(frames, ignore_index=True) if frames else pd.DataFrame()
+
+
+@st.cache_data(ttl=3600, show_spinner=False)
+def load_bilancio_composizione() -> pd.DataFrame:
+    """Composizione RWA, attivo a fair value e stage IFRS9 per banca."""
+    frames = []
+    for y in _years("eba_panel"):
+        try:
+            df = _mart("eba_panel", "mart_banche_bilancio", y)
+            if not df.empty:
+                frames.append(df)
+        except Exception:
+            pass
+    return pd.concat(frames, ignore_index=True) if frames else pd.DataFrame()
+
+
+@st.cache_data(ttl=3600, show_spinner=False)
+def load_crediti_settore() -> pd.DataFrame:
+    """Stock di prestiti a famiglie e imprese (fine trimestre)."""
+    frames = []
+    for y in _years("ecb_bsi"):
+        try:
+            df = _mart("ecb_bsi", "mart_bsi_crediti", y)
+            if not df.empty:
+                frames.append(df)
+        except Exception:
+            pass
+    return pd.concat(frames, ignore_index=True) if frames else pd.DataFrame()

@@ -1,18 +1,74 @@
-metrica,codice,classe_esposizione,descrizione,unita,moltiplicatore
-cet1,FECPHD0020,,"Common Equity Tier 1 ratio, fully loaded","%",100
-capitale_totale,FECPHD0029,,"Total capital ratio, transitional","%",100
-leverage,FECPHD0025,,"Leverage ratio, transitional","%",100
-roe,FECPHD01000,,"Return on equity","%",100
-return_tier1,FECPHD01001,,"Return on Tier 1 capital","%",100
-attivo_totale,FECPHD00116,,"Total assets","mln EUR",0.001
-esposizione_sovrana,FECPHD00294,sovrana,"Esposizione verso governi centrali e banche centrali, per paese controparte","mln EUR",0.001
-esposizione_imprese,FECPHD00297,imprese,"Esposizione verso societa' non finanziarie, per paese controparte","mln EUR",0.001
-esposizione_retail,FECPHD00307,retail,"Esposizione retail, per paese controparte","mln EUR",0.001
-esposizione_istituzioni,FECPHD00300,istituzioni,"Esposizione verso istituzioni finanziarie, per paese controparte","mln EUR",0.001
-esposizione_equity,FECPHD00299,equity,"Esposizione in azioni e quote, per paese controparte","mln EUR",0.001
-esposizione_altro,FECPHD00304,altro,"Altre esposizioni, per paese controparte","mln EUR",0.001
-rwa_sovrana,FECPHD00376,sovrana,"RWA su governi centrali e banche centrali, per paese controparte","mln EUR",0.001
-rwa_imprese,FECPHD00379,imprese,"RWA su societa' non finanziarie, per paese controparte","mln EUR",0.001
-rwa_retail,FECPHD00389,retail,"RWA retail, per paese controparte","mln EUR",0.001
-rwa_istituzioni,FECPHD00382,istituzioni,"RWA su istituzioni finanziarie, per paese controparte","mln EUR",0.001
-rwa_altro,FECPHD00386,altro,"RWA su altre esposizioni, per paese controparte","mln EUR",0.001
+metrica,codice,metodo,classe_esposizione,descrizione,unita,moltiplicatore
+cet1,FECPHD0020,,,"Common Equity Tier 1 ratio, fully loaded",%,100
+capitale_totale,FECPHD0029,,,"Total capital ratio, transitional",%,100
+leverage,FECPHD0025,,,"Leverage ratio, transitional",%,100
+roe,FECPHD01000,,,Return on equity,%,100
+return_tier1,FECPHD01001,,,Return on Tier 1 capital,%,100
+attivo_totale,FECPHD00116,,,Total assets,mln EUR,0.001
+esposizione_sovrana,FECPHD00286,IRB,sovrana,"Esposizione verso governi centrali e banche centrali, per paese controparte (metodo IRB)",mln EUR,0.001
+esposizione_altre_classi,FECPHD00287,IRB,altre_classi,"Esposizione verso altre classi (CIU, covered bond, mutui ipotecari, enti locali, ...), per paese controparte (metodo IRB)",mln EUR,0.001
+esposizione_imprese,FECPHD00288,IRB,imprese,"Esposizione verso societa non finanziarie, per paese controparte (metodo IRB)",mln EUR,0.001
+esposizione_equity,FECPHD00289,IRB,equity,"Esposizione verso azioni e quote, per paese controparte (metodo IRB)",mln EUR,0.001
+esposizione_istituzioni,FECPHD00290,IRB,istituzioni,"Esposizione verso istituzioni finanziarie, per paese controparte (metodo IRB)",mln EUR,0.001
+esposizione_altro,FECPHD00291,IRB,altro,"Esposizione verso altre voci, per paese controparte (metodo IRB)",mln EUR,0.001
+esposizione_retail,FECPHD00292,IRB,retail,"Esposizione verso retail, per paese controparte (metodo IRB)",mln EUR,0.001
+esposizione_altre_classi,FECPHD00293,IRB,altre_classi,"Esposizione verso altre classi (CIU, covered bond, mutui ipotecari, enti locali, ...), per paese controparte (metodo IRB)",mln EUR,0.001
+esposizione_sovrana,FECPHD00294,SA,sovrana,"Esposizione verso governi centrali e banche centrali, per paese controparte (metodo SA)",mln EUR,0.001
+esposizione_altre_classi,FECPHD00295,SA,altre_classi,"Esposizione verso altre classi (CIU, covered bond, mutui ipotecari, enti locali, ...), per paese controparte (metodo SA)",mln EUR,0.001
+esposizione_altre_classi,FECPHD00296,SA,altre_classi,"Esposizione verso altre classi (CIU, covered bond, mutui ipotecari, enti locali, ...), per paese controparte (metodo SA)",mln EUR,0.001
+esposizione_imprese,FECPHD00297,SA,imprese,"Esposizione verso societa non finanziarie, per paese controparte (metodo SA)",mln EUR,0.001
+esposizione_altre_classi,FECPHD00298,SA,altre_classi,"Esposizione verso altre classi (CIU, covered bond, mutui ipotecari, enti locali, ...), per paese controparte (metodo SA)",mln EUR,0.001
+esposizione_equity,FECPHD00299,SA,equity,"Esposizione verso azioni e quote, per paese controparte (metodo SA)",mln EUR,0.001
+esposizione_istituzioni,FECPHD00300,SA,istituzioni,"Esposizione verso istituzioni finanziarie, per paese controparte (metodo SA)",mln EUR,0.001
+esposizione_altre_classi,FECPHD00301,SA,altre_classi,"Esposizione verso altre classi (CIU, covered bond, mutui ipotecari, enti locali, ...), per paese controparte (metodo SA)",mln EUR,0.001
+esposizione_altre_classi,FECPHD00302,SA,altre_classi,"Esposizione verso altre classi (CIU, covered bond, mutui ipotecari, enti locali, ...), per paese controparte (metodo SA)",mln EUR,0.001
+esposizione_altre_classi,FECPHD00303,SA,altre_classi,"Esposizione verso altre classi (CIU, covered bond, mutui ipotecari, enti locali, ...), per paese controparte (metodo SA)",mln EUR,0.001
+esposizione_altro,FECPHD00304,SA,altro,"Esposizione verso altre voci, per paese controparte (metodo SA)",mln EUR,0.001
+esposizione_altre_classi,FECPHD00305,SA,altre_classi,"Esposizione verso altre classi (CIU, covered bond, mutui ipotecari, enti locali, ...), per paese controparte (metodo SA)",mln EUR,0.001
+esposizione_altre_classi,FECPHD00306,SA,altre_classi,"Esposizione verso altre classi (CIU, covered bond, mutui ipotecari, enti locali, ...), per paese controparte (metodo SA)",mln EUR,0.001
+esposizione_retail,FECPHD00307,SA,retail,"Esposizione verso retail, per paese controparte (metodo SA)",mln EUR,0.001
+esposizione_altre_classi,FECPHD00308,SA,altre_classi,"Esposizione verso altre classi (CIU, covered bond, mutui ipotecari, enti locali, ...), per paese controparte (metodo SA)",mln EUR,0.001
+esposizione_altre_classi,FECPHD00309,SA,altre_classi,"Esposizione verso altre classi (CIU, covered bond, mutui ipotecari, enti locali, ...), per paese controparte (metodo SA)",mln EUR,0.001
+rwa_sovrana,FECPHD00368,IRB,sovrana,"RWA verso governi centrali e banche centrali, per paese controparte (metodo IRB)",mln EUR,0.001
+rwa_altre_classi,FECPHD00369,IRB,altre_classi,"RWA verso altre classi (CIU, covered bond, mutui ipotecari, enti locali, ...), per paese controparte (metodo IRB)",mln EUR,0.001
+rwa_imprese,FECPHD00370,IRB,imprese,"RWA verso societa non finanziarie, per paese controparte (metodo IRB)",mln EUR,0.001
+rwa_equity,FECPHD00371,IRB,equity,"RWA verso azioni e quote, per paese controparte (metodo IRB)",mln EUR,0.001
+rwa_istituzioni,FECPHD00372,IRB,istituzioni,"RWA verso istituzioni finanziarie, per paese controparte (metodo IRB)",mln EUR,0.001
+rwa_altro,FECPHD00373,IRB,altro,"RWA verso altre voci, per paese controparte (metodo IRB)",mln EUR,0.001
+rwa_retail,FECPHD00374,IRB,retail,"RWA verso retail, per paese controparte (metodo IRB)",mln EUR,0.001
+rwa_altre_classi,FECPHD00375,IRB,altre_classi,"RWA verso altre classi (CIU, covered bond, mutui ipotecari, enti locali, ...), per paese controparte (metodo IRB)",mln EUR,0.001
+rwa_sovrana,FECPHD00376,SA,sovrana,"RWA verso governi centrali e banche centrali, per paese controparte (metodo SA)",mln EUR,0.001
+rwa_altre_classi,FECPHD00377,SA,altre_classi,"RWA verso altre classi (CIU, covered bond, mutui ipotecari, enti locali, ...), per paese controparte (metodo SA)",mln EUR,0.001
+rwa_altre_classi,FECPHD00378,SA,altre_classi,"RWA verso altre classi (CIU, covered bond, mutui ipotecari, enti locali, ...), per paese controparte (metodo SA)",mln EUR,0.001
+rwa_imprese,FECPHD00379,SA,imprese,"RWA verso societa non finanziarie, per paese controparte (metodo SA)",mln EUR,0.001
+rwa_altre_classi,FECPHD00380,SA,altre_classi,"RWA verso altre classi (CIU, covered bond, mutui ipotecari, enti locali, ...), per paese controparte (metodo SA)",mln EUR,0.001
+rwa_equity,FECPHD00381,SA,equity,"RWA verso azioni e quote, per paese controparte (metodo SA)",mln EUR,0.001
+rwa_istituzioni,FECPHD00382,SA,istituzioni,"RWA verso istituzioni finanziarie, per paese controparte (metodo SA)",mln EUR,0.001
+rwa_altre_classi,FECPHD00383,SA,altre_classi,"RWA verso altre classi (CIU, covered bond, mutui ipotecari, enti locali, ...), per paese controparte (metodo SA)",mln EUR,0.001
+rwa_altre_classi,FECPHD00384,SA,altre_classi,"RWA verso altre classi (CIU, covered bond, mutui ipotecari, enti locali, ...), per paese controparte (metodo SA)",mln EUR,0.001
+rwa_altre_classi,FECPHD00385,SA,altre_classi,"RWA verso altre classi (CIU, covered bond, mutui ipotecari, enti locali, ...), per paese controparte (metodo SA)",mln EUR,0.001
+rwa_altro,FECPHD00386,SA,altro,"RWA verso altre voci, per paese controparte (metodo SA)",mln EUR,0.001
+rwa_altre_classi,FECPHD00387,SA,altre_classi,"RWA verso altre classi (CIU, covered bond, mutui ipotecari, enti locali, ...), per paese controparte (metodo SA)",mln EUR,0.001
+rwa_altre_classi,FECPHD00388,SA,altre_classi,"RWA verso altre classi (CIU, covered bond, mutui ipotecari, enti locali, ...), per paese controparte (metodo SA)",mln EUR,0.001
+rwa_retail,FECPHD00389,SA,retail,"RWA verso retail, per paese controparte (metodo SA)",mln EUR,0.001
+rwa_altre_classi,FECPHD00390,SA,altre_classi,"RWA verso altre classi (CIU, covered bond, mutui ipotecari, enti locali, ...), per paese controparte (metodo SA)",mln EUR,0.001
+rwa_altre_classi,FECPHD00391,SA,altre_classi,"RWA verso altre classi (CIU, covered bond, mutui ipotecari, enti locali, ...), per paese controparte (metodo SA)",mln EUR,0.001
+utile_netto_ytd,FECPHD0054,,,"Utile netto dopo le imposte, cumulato dall'inizio dell'anno (YTD, non trimestrale)",mln EUR,0.001
+margine_operativo_ytd,FECPHD0071,,,"Margine operativo netto, cumulato dall'inizio dell'anno (YTD)",mln EUR,0.001
+cost_of_risk,FECPHD01007,,,Costo del rischio (accezione ampia): rettifiche e accantonamenti su RWA,%,100
+return_on_rwa,FECPHD01002,,,Utile netto su RWA,%,100
+rwa_totale,FECPHD0030,,,RWA totali (denominatore del CET1),mln EUR,0.001
+rwa_credito,FECPHD0037,,,RWA per rischio di credito,mln EUR,0.001
+rwa_mercato,FECPHD0043,,,RWA per rischio di mercato,mln EUR,0.001
+rwa_operativo,FECPHD0033,,,RWA per rischio operativo,mln EUR,0.001
+rwa_cva,FECPHD0048,,,RWA per aggiustamento della valutazione del credito (CVA),mln EUR,0.001
+rwa_cartolarizzazioni,FECPHD0050,,,RWA per cartolarizzazioni del banking book,mln EUR,0.001
+attivo_hft,FECPHD00108,,,Attivita' finanziarie detenute per negoziazione (HFT),mln EUR,0.001
+attivo_oci,FECPHD00111,,,Attivita' finanziarie a fair value con variazioni a patrimonio (FVOCI),mln EUR,0.001
+attivo_fvpl,FECPHD00109,,,Attivita' finanziarie a fair value obbligatorio (FVPL),mln EUR,0.001
+attivo_fvpl_designato,FECPHD00110,,,Attivita' finanziarie a fair value designato (FVPL),mln EUR,0.001
+attivo_costo_ammortizzato,FECPHD00112,,,Attivita' finanziarie al costo ammortizzato,mln EUR,0.001
+prestiti_stage1,FECPHD0092,,,Prestiti lordi in stage 1 (nessun aumento significativo del rischio),mln EUR,0.001
+prestiti_stage2,FECPHD0093,,,Prestiti lordi in stage 2 (aumento significativo del rischio di credito),mln EUR,0.001
+prestiti_stage3,FECPHD0094,,,Prestiti lordi in stage 3 (deteriorati),mln EUR,0.001
+impairment_stage3,FECPHD00106,,,Rettifiche di valore sui prestiti in stage 3,mln EUR,0.001

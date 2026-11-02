@@ -5,7 +5,7 @@ import streamlit as st
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
-from sources import load_bilanci_all, load_deposits_all, load_bsi_snapshot
+from sources import load_bilanci_all, load_crediti_settore, load_deposits_all, load_bsi_snapshot
 
 st.title("🏦 Bilanci MFI")
 
@@ -14,6 +14,7 @@ EXCLUDE = ["U2", "GB", "U5"]
 df_bal = load_bilanci_all()
 df_dep = load_deposits_all()
 df_snap = load_bsi_snapshot()
+df_sett = load_crediti_settore()
 
 if df_bal.empty:
     st.warning("Nessun dato disponibile.")
@@ -91,3 +92,30 @@ if not df_snap.empty:
         fig4.add_trace(go.Bar(x=df_f["rapporto_prestiti_deposits_pct"], y=df_f["paese"], orientation="h", marker_color=["#6366f1" if c == country else "#94a3b8" for c in df_f["paese"]]))
         fig4.update_layout(xaxis_title="Prestiti/Depositi (%)", height=400, margin={"t": 30, "l": 60})
         st.plotly_chart(fig4, width="stretch")
+
+# --- Prestiti per settore ---
+st.subheader("A chi prestano")
+
+if not df_sett.empty:
+    df_s = df_sett[df_sett["paese"] == country].copy()
+    if not df_s.empty:
+        df_s["periodo_label"] = df_s["anno"].astype(str) + " " + df_s["trimestre"]
+        df_s = df_s.sort_values(["anno", "trimestre"])
+
+        figs = go.Figure()
+        if "prestiti_famiglie_mld" in df_s.columns:
+            figs.add_trace(go.Scatter(x=df_s["periodo_label"], y=df_s["prestiti_famiglie_mld"],
+                                      name="Famiglie", line=dict(color="#22c55e", width=2)))
+        if "prestiti_imprese_mld" in df_s.columns:
+            figs.add_trace(go.Scatter(x=df_s["periodo_label"], y=df_s["prestiti_imprese_mld"],
+                                      name="Imprese", line=dict(color="#6366f1", width=2)))
+        figs.update_layout(yaxis_title="Miliardi € (fine trimestre)", height=340, margin={"t": 30})
+        st.plotly_chart(figs, width="stretch")
+
+        if "quota_famiglie_pct" in df_s.columns:
+            quota = df_s["quota_famiglie_pct"].dropna()
+            if not quota.empty:
+                st.caption(
+                    f"Stock a fine trimestre. Oggi il {quota.iloc[-1]:.1f}% dei prestiti a famiglie "
+                    "e imprese e' verso le famiglie: dieci anni fa erano circa 47."
+                )

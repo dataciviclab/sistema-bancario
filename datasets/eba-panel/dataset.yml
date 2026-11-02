@@ -38,7 +38,7 @@ clean:
     - metrica
     - valore
   validate:
-    min_rows: 100000
+    min_rows: 300000
 
 mart:
   tables:
@@ -48,10 +48,15 @@ mart:
       sql: "sql/mart_banche_snapshot.sql"
     - name: "mart_esposizioni"
       sql: "sql/mart_esposizioni.sql"
+    - name: "mart_esposizioni_metodo"
+      sql: "sql/mart_esposizioni_metodo.sql"
+    - name: "mart_banche_bilancio"
+      sql: "sql/mart_banche_bilancio.sql"
     - name: "mart_banche_anagrafica"
       sql: "sql/mart_banche_anagrafica.sql"
   required_tables:
-    ["mart_banche_kpi", "mart_banche_snapshot", "mart_esposizioni", "mart_banche_anagrafica"]
+    ["mart_banche_kpi", "mart_banche_snapshot", "mart_esposizioni",
+     "mart_esposizioni_metodo", "mart_banche_bilancio", "mart_banche_anagrafica"]
   validate:
     table_rules:
       # Copertura reale: CET1 parte dal 2015H2 e nel 2025 non e' ancora
@@ -64,8 +69,14 @@ mart:
         not_null: [banca, paese]
         min_rows: 50
       mart_esposizioni:
-        not_null: [banca, paese_controparte, periodo]
+        not_null: [banca, paese_controparte, periodo, esposizione_totale_mld]
         min_rows: 5000
+      mart_esposizioni_metodo:
+        not_null: [banca, paese_controparte, periodo, metodo, esposizione_mld]
+        min_rows: 5000
+      mart_banche_bilancio:
+        not_null: [banca, periodo]
+        min_rows: 1000
       mart_banche_anagrafica:
         not_null: [banca, paese]
         min_rows: 50

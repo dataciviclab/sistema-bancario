@@ -8,6 +8,7 @@ from context import get_kpi_status, get_status_emoji
 from sources import (
     load_banche_kpi,
     load_banche_snapshot,
+    load_bilancio_composizione,
     load_esposizioni,
 )
 
@@ -18,6 +19,7 @@ EXCLUDE = ["U2", "GB", "U5"]
 
 df_snap = load_banche_snapshot()
 df_kpi = load_banche_kpi()
+sel_bank = None
 
 if df_snap.empty:
     st.warning("Nessun dato EBA disponibile.")
@@ -33,8 +35,8 @@ df_country = df_snap[df_snap["paese"] == country].copy()
 st.subheader(f"Banche {country}")
 
 cols_show = [
-    "nome_banca", "periodo_attivo", "periodo_cet1", "periodo_roe",
-    "attivo_totale_mld", "cet1_pct", "roe_pct", "leverage_pct",
+    "nome_banca", "periodo_attivo", "periodo_utile", "attivo_totale_mld",
+    "utile_netto_ytd_mld", "cet1_pct", "roe_pct", "leverage_pct",
 ]
 cols_avail = [c for c in cols_show if c in df_country.columns]
 df_table = df_country[cols_avail].copy()
@@ -42,7 +44,8 @@ df_table.columns = [c.replace("_", " ").title() for c in df_table.columns]
 st.dataframe(df_table, width="stretch", hide_index=True)
 st.caption(
     "Ogni colonna porta il periodo a cui si riferisce: EBA pubblica con 6-12 mesi "
-    "di ritardo e alcune variabili (CET1, ROE) non sono ancora disponibili per il 2025."
+    "di ritardo e alcune variabili (CET1, ROE) non sono ancora disponibili per il 2025. "
+    "L'utile e' cumulato dall'inizio dell'anno (YTD): a meta' anno e' un semestre, a dicembre l'esercizio."
 )
 
 # --- Trend per banca selezionata ---
@@ -130,8 +133,10 @@ if not df_kpi.empty:
 
             periodo_label = f"{str(ultimo)[:4]}H{1 if str(ultimo)[4:6] == '06' else 2}"
             st.caption(
-                f"Esposizioni al {periodo_label}, classi SA dichiarate in series_catalog.csv. "
-                "Il paese di origine pesa quasi sempre piu' degli altri: e' il home bias."
+                f"Esposizioni al {periodo_label}, somma dei metodi SA e IRB "
+                "(classi dichiarate in series_catalog.csv). "
+                "La quota sovrana e' il peso dei titoli di Stato sul totale dell'esposizione "
+                "verso quel paese."
             )
 
             df_show = df_l[[
@@ -143,3 +148,45 @@ if not df_kpi.empty:
                 "Quota sovrana (%)", "RWA (mld)", "Densità RWA (%)",
             ]
             st.dataframe(df_show, width="stretch", hide_index=True)
+
+# ============================================================
+# COMPOSIZIONE: da dove viene il rischio
+# ============================================================
+if sel_bank is not None:
+    st.subheader("Da dove viene il rischio")
+    df_comp = load_bilancio_composizione()
+
+    if not df_comp.empty:
+        df_c = df_comp[df_comp["banca"] == sel_bank].sort_values("periodo")
+        if df_c.empty:
+            st.info("Composizione non disponibile per questa banca.")
+        else:
+            ultimo_c = int(df_c["periodo"].max())
+            r = df_c[df_c["periodo"] == ultimo_c].iloc[0]
+            etichetta = f"{str(ultimo_c)[:4]}H{1 if str(ultimo_c)[4:6] == '06' else 2}"
+
+            c1, c2, c3 = st.columns(3)
+            if r.get("quota_rwa_credito_pct") == r.get("quota_rwa_credito_pct"):
+                c1.metric(
+                    "RWA da credito",
+                    f"{r['quota_rwa_credito_pct']:.0f}%",
+                    help="Quota del capitale assorbito che viene dal rischio di credito",
+                )
+            if r.get("quota_fair_value_pct") == r.get("quota_fair_value_pct"):
+                c2.metric(
+                    "Attivo a fair value",
+                    f"{r['quota_fair_value_pct']:.0f}%",
+                    help="Quota di attivita' finanziarie valutate a prezzi di mercato",
+                )
+            if r.get("prestiti_stage2_pct") == r.get("prestiti_stage2_pct"):
+                c3.metric(
+                    "Prestiti in stage 2",
+                    f"{r['prestiti_stage2_pct']:.1f}%",
+                    help="Credito con aumento significativo del rischio: il segnale prima delle sofferenze",
+                )
+
+            st.caption(
+                f"Al {etichetta}. Stage 3 (deteriorati): {r.get('prestiti_stage3_pct', float('nan')):.1f}%, "
+                f"copertura {r.get('copertura_stage3_pct', float('nan')):.0f}%. "
+                "RWA: credito, mercato, operativo. Fonte EBA (COREP/FINREP)."
+            )

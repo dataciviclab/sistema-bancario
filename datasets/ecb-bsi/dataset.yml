@@ -29,12 +29,24 @@ raw:
         url: "https://data-api.ecb.europa.eu/service/data/BSI/Q..N.A+B.T00+A20+L20+L40+L60.A+X.1.Z5+U2+U6.0000+1000+2000+2110+2300.Z01.E?format=csvdata&startPeriod=2003-01"
         filename: "ecb_bsi_raw.csv"
       primary: true
+    # Scomposizione famiglie / imprese: esiste solo a frequenza mensile.
+    # Sono STOCK: nel mart si prende l'ultimo mese del trimestre, non la media.
+    - name: "ecb_bsi_crediti"
+      type: "http_file"
+      client:
+        timeout: 300
+        retries: 2
+        user_agent: "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+      args:
+        url: "https://data-api.ecb.europa.eu/service/data/BSI/M..N.A.A20.A.1.U2.2240+2250.Z01.E?format=csvdata&startPeriod=2003-01"
+        filename: "ecb_bsi_crediti.csv"
 
 clean:
   sql: "sql/clean.sql"
   read:
     source: auto
-    mode: latest
+    # mode: all -> trimestrale (bilanci) + mensile (crediti per settore)
+    mode: all
     delim: ","
     encoding: utf-8
     header: true
@@ -57,7 +69,10 @@ mart:
       sql: "sql/mart_bsi_deposits.sql"
     - name: "mart_bsi_snapshot"
       sql: "sql/mart_bsi_snapshot.sql"
-  required_tables: ["mart_bsi_balance", "mart_bsi_deposits", "mart_bsi_snapshot"]
+    - name: "mart_bsi_crediti"
+      sql: "sql/mart_bsi_crediti.sql"
+  required_tables:
+    ["mart_bsi_balance", "mart_bsi_deposits", "mart_bsi_snapshot", "mart_bsi_crediti"]
   validate:
     table_rules:
       mart_bsi_balance:
@@ -69,3 +84,6 @@ mart:
       mart_bsi_snapshot:
         not_null: [paese, attivo_totale_mld]
         min_rows: 20
+      mart_bsi_crediti:
+        not_null: [paese, anno, trimestre]
+        min_rows: 200

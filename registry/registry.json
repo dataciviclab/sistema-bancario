@@ -2,7 +2,7 @@
   "schema_version": 1,
   "repo": "sistema-bancario",
   "source_repo": "dataciviclab/sistema-bancario",
-  "updated_at": "2026-11-01",
+  "updated_at": "2026-11-02",
   "datasets": [
     {
       "slug": "banche_unified",
@@ -233,6 +233,18 @@
           "description": ""
         },
         {
+          "name": "metodo",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
+          "name": "classe_esposizione",
+          "type": "VARCHAR",
+          "role": "dimension",
+          "description": ""
+        },
+        {
           "name": "descrizione",
           "type": "VARCHAR",
           "role": "dimension",
@@ -240,12 +252,6 @@
         },
         {
           "name": "unita",
-          "type": "VARCHAR",
-          "role": "dimension",
-          "description": ""
-        },
-        {
-          "name": "classe_esposizione",
           "type": "VARCHAR",
           "role": "dimension",
           "description": ""
@@ -273,6 +279,12 @@
           "type": "DOUBLE",
           "role": "metric",
           "description": ""
+        },
+        {
+          "name": "voci_origine",
+          "type": "BIGINT",
+          "role": "metric",
+          "description": ""
         }
       ],
       "location": {
@@ -285,6 +297,8 @@
         "eba_panel__mart_banche_kpi",
         "eba_panel__mart_banche_snapshot",
         "eba_panel__mart_esposizioni",
+        "eba_panel__mart_esposizioni_metodo",
+        "eba_panel__mart_banche_bilancio",
         "eba_panel__mart_banche_anagrafica"
       ]
     },
@@ -488,7 +502,8 @@
       "mart_refs": [
         "ecb_bsi__mart_bsi_balance",
         "ecb_bsi__mart_bsi_deposits",
-        "ecb_bsi__mart_bsi_snapshot"
+        "ecb_bsi__mart_bsi_snapshot",
+        "ecb_bsi__mart_bsi_crediti"
       ]
     },
     {
@@ -691,7 +706,8 @@
       "stage": "incubating",
       "mart_refs": [
         "ecb_mir__mart_mir_rates",
-        "ecb_mir__mart_mir_snapshot"
+        "ecb_mir__mart_mir_snapshot",
+        "ecb_mir__mart_mir_volumi"
       ]
     },
     {
@@ -796,6 +812,16 @@
       }
     },
     {
+      "slug": "eba_panel__mart_banche_bilancio",
+      "dataset": "eba_panel",
+      "table": "mart_banche_bilancio",
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-mart/sistema-bancario/eba_panel/2025/mart_banche_bilancio.parquet",
+        "multi_file": false
+      }
+    },
+    {
       "slug": "eba_panel__mart_banche_kpi",
       "dataset": "eba_panel",
       "table": "mart_banche_kpi",
@@ -826,6 +852,16 @@
       }
     },
     {
+      "slug": "eba_panel__mart_esposizioni_metodo",
+      "dataset": "eba_panel",
+      "table": "mart_esposizioni_metodo",
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-mart/sistema-bancario/eba_panel/2025/mart_esposizioni_metodo.parquet",
+        "multi_file": false
+      }
+    },
+    {
       "slug": "ecb_bls__mart_bls_credit",
       "dataset": "ecb_bls",
       "table": "mart_bls_credit",
@@ -852,6 +888,16 @@
       "location": {
         "type": "gcs",
         "path": "gs://dataciviclab-mart/sistema-bancario/ecb_bsi/2026/mart_bsi_balance.parquet",
+        "multi_file": false
+      }
+    },
+    {
+      "slug": "ecb_bsi__mart_bsi_crediti",
+      "dataset": "ecb_bsi",
+      "table": "mart_bsi_crediti",
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-mart/sistema-bancario/ecb_bsi/2026/mart_bsi_crediti.parquet",
         "multi_file": false
       }
     },
@@ -916,6 +962,16 @@
       }
     },
     {
+      "slug": "ecb_mir__mart_mir_volumi",
+      "dataset": "ecb_mir",
+      "table": "mart_mir_volumi",
+      "location": {
+        "type": "gcs",
+        "path": "gs://dataciviclab-mart/sistema-bancario/ecb_mir/2026/mart_mir_volumi.parquet",
+        "multi_file": false
+      }
+    },
+    {
       "slug": "wb_financial__mart_wd_indicators",
       "dataset": "wb_financial",
       "table": "mart_wd_indicators",
@@ -945,7 +1001,7 @@
       "detail": "anno 2026 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20261101T225654Z_753e64d0",
+        "run_id": "20261102T150745Z_b284b5b2",
         "year": 2026,
         "status": "SUCCESS",
         "quality_score": {
@@ -959,12 +1015,12 @@
         },
         "output_bytes": {
           "raw": 55281,
-          "clean": 47321,
-          "mart": 36820
+          "clean": 47325,
+          "mart": 36824
         },
-        "started_at": "2026-11-01T22:56:54.525253+00:00",
-        "finished_at": "2026-11-01T22:56:54.673796+00:00",
-        "duration_seconds": 0.149
+        "started_at": "2026-11-02T15:07:45.896314+00:00",
+        "finished_at": "2026-11-02T15:07:46.012303+00:00",
+        "duration_seconds": 0.116
       }
     },
     {
@@ -975,7 +1031,7 @@
       "detail": "anno 2025 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20261101T225614Z_bc257cae",
+        "run_id": "20261102T150556Z_abf980e2",
         "year": 2025,
         "status": "SUCCESS",
         "quality_score": {
@@ -984,17 +1040,17 @@
           "mart": 100
         },
         "output_rows": {
-          "clean": 316280,
-          "mart": 27472
+          "clean": 1100357,
+          "mart": 75931
         },
         "output_bytes": {
           "raw": 155561608,
-          "clean": 1888765,
-          "mart": 410910
+          "clean": 5552808,
+          "mart": 996617
         },
-        "started_at": "2026-11-01T22:56:14.275807+00:00",
-        "finished_at": "2026-11-01T22:56:19.656422+00:00",
-        "duration_seconds": 5.381
+        "started_at": "2026-11-02T15:05:56.161903+00:00",
+        "finished_at": "2026-11-02T15:06:01.778070+00:00",
+        "duration_seconds": 5.616
       }
     },
     {
@@ -1005,7 +1061,7 @@
       "detail": "anno 2026 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20261101T225623Z_47211180",
+        "run_id": "20261102T150606Z_d28f73e4",
         "year": 2026,
         "status": "SUCCESS",
         "quality_score": {
@@ -1014,18 +1070,18 @@
           "mart": 100
         },
         "output_rows": {
-          "raw": 33718,
-          "clean": 15634,
+          "raw": 55774,
+          "clean": 23858,
           "mart": 1500
         },
         "output_bytes": {
-          "raw": 11476950,
-          "clean": 20376,
-          "mart": 24713
+          "raw": 19616615,
+          "clean": 26678,
+          "mart": 33614
         },
-        "started_at": "2026-11-01T22:56:23.386172+00:00",
-        "finished_at": "2026-11-01T22:56:26.362445+00:00",
-        "duration_seconds": 2.976
+        "started_at": "2026-11-02T15:06:06.669688+00:00",
+        "finished_at": "2026-11-02T15:06:09.148289+00:00",
+        "duration_seconds": 2.479
       }
     },
     {
@@ -1036,7 +1092,7 @@
       "detail": "anno 2026 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20261101T225630Z_f82441b5",
+        "run_id": "20261102T150614Z_461fad8e",
         "year": 2026,
         "status": "SUCCESS",
         "quality_score": {
@@ -1046,17 +1102,17 @@
         },
         "output_rows": {
           "raw": 32497,
-          "clean": 16783,
-          "mart": 2837
+          "clean": 31313,
+          "mart": 5166
         },
         "output_bytes": {
-          "raw": 17279110,
-          "clean": 93355,
-          "mart": 60880
+          "raw": 24827512,
+          "clean": 183801,
+          "mart": 84879
         },
-        "started_at": "2026-11-01T22:56:30.257740+00:00",
-        "finished_at": "2026-11-01T22:56:33.299286+00:00",
-        "duration_seconds": 3.042
+        "started_at": "2026-11-02T15:06:14.805647+00:00",
+        "finished_at": "2026-11-02T15:06:18.902759+00:00",
+        "duration_seconds": 4.097
       }
     },
     {
@@ -1067,7 +1123,7 @@
       "detail": "anno 2026 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20261101T225638Z_a1c45923",
+        "run_id": "20261102T150624Z_0040c5bd",
         "year": 2026,
         "status": "SUCCESS",
         "quality_score": {
@@ -1085,9 +1141,9 @@
           "clean": 85270,
           "mart": 58466
         },
-        "started_at": "2026-11-01T22:56:38.839168+00:00",
-        "finished_at": "2026-11-01T22:56:42.926628+00:00",
-        "duration_seconds": 4.087
+        "started_at": "2026-11-02T15:06:24.040047+00:00",
+        "finished_at": "2026-11-02T15:06:27.689653+00:00",
+        "duration_seconds": 3.65
       }
     },
     {
@@ -1098,7 +1154,7 @@
       "detail": "anno 2026 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20261101T225645Z_ca8e118b",
+        "run_id": "20261102T150632Z_e6c354d1",
         "year": 2026,
         "status": "SUCCESS",
         "quality_score": {
@@ -1107,18 +1163,18 @@
           "mart": 100
         },
         "output_rows": {
-          "raw": 113903,
-          "clean": 51363,
-          "mart": 1817
+          "raw": 114351,
+          "clean": 72951,
+          "mart": 3648
         },
         "output_bytes": {
-          "raw": 69617127,
-          "clean": 90098,
-          "mart": 51333
+          "raw": 86346431,
+          "clean": 199425,
+          "mart": 74044
         },
-        "started_at": "2026-11-01T22:56:45.730562+00:00",
-        "finished_at": "2026-11-01T22:56:50.869519+00:00",
-        "duration_seconds": 5.139
+        "started_at": "2026-11-02T15:06:32.033177+00:00",
+        "finished_at": "2026-11-02T15:06:39.669066+00:00",
+        "duration_seconds": 7.636
       }
     },
     {
@@ -1129,7 +1185,7 @@
       "detail": "anno 2025 — mart: si",
       "action": "",
       "run": {
-        "run_id": "20261101T225651Z_9fa361b8",
+        "run_id": "20261102T150640Z_ac74ccb3",
         "year": 2025,
         "status": "SUCCESS",
         "quality_score": {
@@ -1147,9 +1203,9 @@
           "clean": 250716,
           "mart": 230033
         },
-        "started_at": "2026-11-01T22:56:51.282122+00:00",
-        "finished_at": "2026-11-01T22:56:54.092604+00:00",
-        "duration_seconds": 2.81
+        "started_at": "2026-11-02T15:06:40.044091+00:00",
+        "finished_at": "2026-11-02T15:07:45.522034+00:00",
+        "duration_seconds": 65.478
       }
     }
   ],
